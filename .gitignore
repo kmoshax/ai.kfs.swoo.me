@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# KFS shared captcha seeds (runtime secret)
+.kfs-seeds.json
+.kfs-cache.json

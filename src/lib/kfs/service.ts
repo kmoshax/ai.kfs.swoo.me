@@ -1,165 +1,215 @@
 /**
- * Orchestrates the lookup wizard on top of the raw KFS flow + caches.
+ * Captcha-free grade lookup.
  *
- * The student only ever solves a captcha that the KFS site itself produced —
- * we never try to read it. Caching keeps the number of captchas minimal:
- *   - grades cached  -> 0 captchas
- *   - identity cached -> 1 captcha (grades only)
- *   - cold           -> 2 captchas (identify, then grades)
+ * Students type only their national ID. The two upstream captchas are solved
+ * once and stored as shared seeds (see pool.ts); every lookup reuses them. A
+ * keep-alive loop pings both seeds so their ASP.NET sessions never time out.
+ * If a seed does die, `SeedExpired` is thrown and the API drives a one-time
+ * re-seed (a single captcha that revives the seed for everyone).
  */
-
 import { computeGpa } from "./gpa";
 import {
+  type FormState,
+  type Identity,
   startGetmail,
   startNewresult,
   submitGetmail,
   submitNewresult,
 } from "./kfs";
 import {
+  clearSeed,
+  formToSeed,
+  getSeed,
+  migrateSeedsToDb,
+  type Page,
+  seedToForm,
+  setSeed,
+} from "./pool";
+import {
   cacheGrades,
   cacheIdentity,
-  dropSession,
+  dropReseed,
   getCachedGrades,
   getCachedIdentity,
-  getSession,
+  getReseed,
   type LookupResult,
+  migrateCacheToDb,
   newSid,
-  putSession,
+  putReseed,
 } from "./store";
 
-export type Step =
-  | { step: "identify"; sid: string; captcha: string; error?: "captcha" }
-  | {
-      step: "grades";
-      sid: string;
-      captcha: string;
-      studentName?: string;
-      error?: "captcha";
-    }
-  | { step: "done"; result: LookupResult }
-  | { step: "error"; reason: string; message?: string };
+// A real, known-good student used to health-check / verify seeds.
+const PROBE = {
+  nationalId: "30704071501452",
+  code: "1620120250100828",
+  password: "333613",
+};
 
-async function openGrades(
-  nationalId: string,
-  identity: {
-    name: string;
-    code: string;
-    password: string;
-    email: string | null;
-  },
-): Promise<Step> {
-  const form = await startNewresult();
-  const sid = newSid();
-  putSession({
-    sid,
-    stage: "grades",
-    nationalId,
-    form,
-    identity,
-    createdAt: Date.now(),
-  });
-  return {
-    step: "grades",
-    sid,
-    captcha: form.captcha,
-    studentName: identity.name,
-  };
+export class SeedExpired extends Error {
+  constructor(public page: Page) {
+    super(`seed expired: ${page}`);
+  }
+}
+export class LookupError extends Error {
+  constructor(
+    public reason: string,
+    message?: string,
+  ) {
+    super(message ?? reason);
+  }
 }
 
-/** Entry point: given a national id, decide what the student must do next. */
-export async function begin(nationalId: string): Promise<Step> {
-  const cachedGrades = getCachedGrades(nationalId);
-  if (cachedGrades)
-    return { step: "done", result: { ...cachedGrades, cached: true } };
+async function resolveIdentity(nationalId: string): Promise<Identity> {
+  const cached = await getCachedIdentity(nationalId);
+  if (cached) return cached;
 
-  const identity = getCachedIdentity(nationalId);
-  if (identity) return openGrades(nationalId, identity);
+  const seed = await getSeed("getmail");
+  if (!seed) throw new SeedExpired("getmail");
 
-  const form = await startGetmail();
-  const sid = newSid();
-  putSession({
-    sid,
-    stage: "identify",
+  const res = await submitGetmail(
+    seedToForm(seed),
     nationalId,
-    form,
-    createdAt: Date.now(),
-  });
-  return { step: "identify", sid, captcha: form.captcha };
-}
-
-/** Submit the getmail captcha, then move on to the grades captcha. */
-export async function identify(sid: string, captcha: string): Promise<Step> {
-  const session = getSession(sid);
-  if (!session || session.stage !== "identify")
-    return {
-      step: "error",
-      reason: "session",
-      message: "انتهت الجلسة، حاول من جديد",
-    };
-
-  const res = await submitGetmail(session.form, session.nationalId, captcha);
+    seed.captchaText,
+  );
   if (!res.ok) {
-    if (res.reason === "captcha") {
-      const form = await startGetmail();
-      session.form = form;
-      putSession(session);
-      return { step: "identify", sid, captcha: form.captcha, error: "captcha" };
+    // A dead session returns a captcha error or an ASP "Runtime Error" page
+    // (reason "unknown"); both mean the seed must be revived.
+    if (res.reason === "captcha" || res.reason === "unknown") {
+      await clearSeed("getmail");
+      throw new SeedExpired("getmail");
     }
-    dropSession(sid);
-    return {
-      step: "error",
-      reason: res.reason,
-      message: res.message ?? "تعذّر العثور على الطالب",
-    };
+    throw new LookupError(res.reason, res.message);
+  }
+  await cacheIdentity(nationalId, res.identity);
+  return res.identity;
+}
+
+const gi = globalThis as typeof globalThis & { __kfsInit?: Promise<void> };
+
+/** Run the one-time disk -> Mongo migration once, before serving lookups. */
+function ensureInit(): Promise<void> {
+  gi.__kfsInit ??= Promise.all([migrateSeedsToDb(), migrateCacheToDb()])
+    .then(() => {})
+    .catch(() => {});
+  return gi.__kfsInit;
+}
+
+/** Main entry: national ID -> grades + GPA, no captcha. */
+export async function lookupGrades(nationalId: string): Promise<LookupResult> {
+  await ensureInit();
+  const cached = await getCachedGrades(nationalId);
+  if (cached) return { ...cached, cached: true };
+
+  const identity = await resolveIdentity(nationalId);
+
+  const seed = await getSeed("newresult");
+  if (!seed) throw new SeedExpired("newresult");
+
+  const res = await submitNewresult(
+    seedToForm(seed),
+    identity.code,
+    identity.password,
+    seed.captchaText,
+  );
+  if (!res.ok) {
+    if (res.reason === "captcha" || res.reason === "unknown") {
+      await clearSeed("newresult");
+      throw new SeedExpired("newresult");
+    }
+    throw new LookupError(res.reason, res.message);
   }
 
-  cacheIdentity(session.nationalId, res.identity);
-  dropSession(sid);
-  return openGrades(session.nationalId, res.identity);
-}
-
-/** Submit the grades captcha and produce the final transcript + GPA. */
-export async function grades(sid: string, captcha: string): Promise<Step> {
-  const session = getSession(sid);
-  if (!session || session.stage !== "grades" || !session.identity)
-    return {
-      step: "error",
-      reason: "session",
-      message: "انتهت الجلسة، حاول من جديد",
-    };
-
-  const { code, password } = session.identity;
-  const res = await submitNewresult(session.form, code, password, captcha);
-  if (!res.ok) {
-    if (res.reason === "captcha") {
-      const form = await startNewresult();
-      session.form = form;
-      putSession(session);
-      return {
-        step: "grades",
-        sid,
-        captcha: form.captcha,
-        studentName: session.identity.name,
-        error: "captcha",
-      };
-    }
-    dropSession(sid);
-    return {
-      step: "error",
-      reason: res.reason,
-      message: res.message ?? "تعذّر جلب الدرجات",
-    };
-  }
-
-  const gpa = computeGpa(res.transcript.courses);
   const result: LookupResult = {
-    identity: session.identity,
+    identity,
     transcript: res.transcript,
-    gpa,
+    gpa: computeGpa(res.transcript.courses),
     fetchedAt: Date.now(),
     cached: false,
   };
-  cacheGrades(session.nationalId, result);
-  dropSession(sid);
-  return { step: "done", result };
+  await cacheGrades(nationalId, result);
+  return result;
+}
+
+// ---- Re-seeding (only when a seed dies) --------------------------------
+
+/** Open a fresh upstream session and hand its captcha image to be solved. */
+export async function startReseed(
+  page: Page,
+): Promise<{ seedId: string; captcha: string }> {
+  const form =
+    page === "getmail" ? await startGetmail() : await startNewresult();
+  const seedId = newSid();
+  putReseed({ seedId, page, form, createdAt: Date.now() });
+  return { seedId, captcha: form.captcha };
+}
+
+/** Verify a solved captcha against the probe student, then store the seed. */
+export async function completeReseed(
+  seedId: string,
+  captchaText: string,
+): Promise<{ ok: boolean; reason?: string }> {
+  const r = getReseed(seedId);
+  if (!r) return { ok: false, reason: "session" };
+
+  const verdict = await verifySeed(r.page, r.form, captchaText);
+  if (!verdict.ok) return verdict;
+
+  await setSeed(r.page, formToSeed(r.form, captchaText));
+  dropReseed(seedId);
+  return { ok: true };
+}
+
+async function verifySeed(
+  page: Page,
+  form: FormState,
+  captchaText: string,
+): Promise<{ ok: boolean; reason?: string }> {
+  if (page === "getmail") {
+    const res = await submitGetmail(form, PROBE.nationalId, captchaText);
+    return res.ok ? { ok: true } : { ok: false, reason: res.reason };
+  }
+  const res = await submitNewresult(
+    form,
+    PROBE.code,
+    PROBE.password,
+    captchaText,
+  );
+  // `view_limit` means login (captcha + code/pass) was accepted — the seed is
+  // alive; only the probe student's view quota is spent. That's a perfect
+  // health signal that never burns a real student's quota.
+  if (res.ok || res.reason === "view_limit") return { ok: true };
+  return { ok: false, reason: res.reason };
+}
+
+export async function seedStatus(): Promise<Record<Page, boolean>> {
+  const [getmail, newresult] = await Promise.all([
+    getSeed("getmail"),
+    getSeed("newresult"),
+  ]);
+  return { getmail: !!getmail, newresult: !!newresult };
+}
+
+// ---- Keep-alive --------------------------------------------------------
+
+const gk = globalThis as typeof globalThis & { __kfsKeepAlive?: boolean };
+const KEEPALIVE_MS = 4 * 60 * 1000; // < ASP.NET 20-min sliding timeout
+
+async function ping(page: Page): Promise<void> {
+  const seed = await getSeed(page);
+  if (!seed) return;
+  // The probe student is always valid, so any failure means the seed is dead.
+  const verdict = await verifySeed(page, seedToForm(seed), seed.captchaText);
+  if (!verdict.ok) await clearSeed(page);
+}
+
+export function startKeepAlive(): void {
+  if (gk.__kfsKeepAlive) return;
+  gk.__kfsKeepAlive = true;
+  // Seed Mongo from any local files on first boot, then keep sessions warm.
+  void ensureInit();
+  const timer = setInterval(() => {
+    void ping("getmail");
+    void ping("newresult");
+  }, KEEPALIVE_MS);
+  timer.unref?.();
 }

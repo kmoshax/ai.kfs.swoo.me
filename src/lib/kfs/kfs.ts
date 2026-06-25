@@ -174,7 +174,7 @@ export type GradesResult =
   | { ok: true; transcript: Transcript }
   | {
       ok: false;
-      reason: "captcha" | "not_found" | "unknown";
+      reason: "captcha" | "not_found" | "view_limit" | "unknown";
       message?: string;
     };
 
@@ -213,7 +213,14 @@ export async function submitNewresult(
   const transcript = parseTranscript(html);
   if (transcript.courses.length > 0) return { ok: true, transcript };
 
-  // No grid: figure out why. The captcha error on this page is a generic label.
+  // No grid: figure out why.
+  // The university caps how many times a student may view their result.
+  if (/تعديت عدد المرات|عدد المرات المتاحة/.test(html))
+    return {
+      ok: false,
+      reason: "view_limit",
+      message: "لقد تعديت عدد مرات الاطلاع على النتيجة المسموح بها",
+    };
   if (/برجاء ادخال الكود|الصورة/.test(html))
     return { ok: false, reason: "captcha" };
   if (/الكود او كلمة المرور|غير صحيح/.test(html))
