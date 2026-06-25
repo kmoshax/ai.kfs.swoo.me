@@ -1,16 +1,9 @@
 "use client";
 
-import {
-  IdentityCardIcon,
-  SecurityCheckIcon,
-  SparklesIcon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { ResultView } from "@/components/result-view";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import type {
@@ -118,154 +111,92 @@ export function LookupWizard() {
 
   if (reseed) {
     return (
-      <div className="animate-rise w-full max-w-md">
-        <Card>
-          <CardContent className="space-y-5">
-            <Field
-              icon={SecurityCheckIcon}
-              title="One quick check"
-              hint="The system needs a light verification. Type the code in the image to continue — this rarely happens."
-            />
-            <div className="flex items-center justify-center rounded-xl border border-border bg-black/20 p-3">
-              {/* biome-ignore lint/performance/noImgElement: captcha is a per-request data: URL, next/image cannot optimize it */}
-              <img
-                src={reseed.captcha}
-                alt="Verification code"
-                className="h-12 rounded-md bg-white px-1"
-                style={{ imageRendering: "pixelated" }}
-              />
-            </div>
-            <form onSubmit={onReseed} className="space-y-3">
-              <Input
-                ref={captchaRef}
-                inputMode="numeric"
-                autoComplete="off"
-                placeholder="Code"
-                value={captcha}
-                onChange={(e) => setCaptcha(e.target.value.replace(/\D/g, ""))}
-                className="h-12 text-center font-mono text-lg tracking-[0.4em]"
-              />
-              <Button
-                type="submit"
-                className="h-12 w-full text-base"
-                disabled={loading}
-              >
-                {loading ? <Spinner /> : "Verify & continue"}
-              </Button>
-            </form>
-            <button
-              type="button"
-              onClick={reset}
-              className="w-full text-center text-xs text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Cancel
-            </button>
-          </CardContent>
-        </Card>
+      <div className="animate-rise w-full max-w-sm text-center">
+        <h2 className="font-heading text-2xl font-semibold tracking-tight">
+          One quick check
+        </h2>
+        <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
+          Type the code below to continue. This rarely happens.
+        </p>
+
+        <div className="mt-8 flex justify-center">
+          {/* biome-ignore lint/performance/noImgElement: captcha is a per-request data: URL, next/image cannot optimize it */}
+          <img
+            src={reseed.captcha}
+            alt="Verification code"
+            className="h-14 rounded-lg border border-border bg-white px-2"
+            style={{ imageRendering: "pixelated" }}
+          />
+        </div>
+
+        <form onSubmit={onReseed} className="mt-6 space-y-3">
+          <Input
+            ref={captchaRef}
+            inputMode="numeric"
+            autoComplete="off"
+            placeholder="Code"
+            value={captcha}
+            onChange={(e) => setCaptcha(e.target.value.replace(/\D/g, ""))}
+            className="h-14 rounded-2xl text-center font-mono text-xl tracking-[0.4em]"
+          />
+          <Button
+            type="submit"
+            className="h-14 w-full rounded-2xl text-base"
+            disabled={loading}
+          >
+            {loading ? <Spinner /> : "Continue"}
+          </Button>
+        </form>
+
+        <button
+          type="button"
+          onClick={reset}
+          className="mt-5 text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+        >
+          Cancel
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="flex w-full max-w-md flex-col items-center">
-      <header className="animate-rise mb-8 flex flex-col items-center gap-4 text-center">
-        <div className="flex items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-3.5 py-1.5 text-xs font-medium text-primary/90 backdrop-blur">
-          <HugeiconsIcon icon={SparklesIcon} size={14} />
-          Faculty of Artificial Intelligence · Kafr El-Sheikh University
-        </div>
+    <div className="animate-rise flex w-full max-w-md flex-col items-center text-center">
+      <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+        Kafr El-Sheikh · Faculty of AI
+      </p>
 
-        <h1 className="font-heading text-4xl font-bold leading-[1.1] tracking-tight text-balance sm:text-5xl">
-          Know your <span className="text-primary">result</span>.
-        </h1>
+      <h1 className="mt-6 font-heading text-5xl font-semibold leading-[1.05] tracking-tight text-balance sm:text-6xl">
+        Know your result.
+      </h1>
 
-        <p className="max-w-xs text-balance text-sm leading-relaxed text-muted-foreground">
-          Your grades and cumulative GPA from your National ID alone — no code,
-          no password.
-        </p>
-      </header>
+      <p className="mt-5 max-w-sm text-lg leading-relaxed text-muted-foreground text-balance">
+        Your grades and GPA from your National ID. No code, no password.
+      </p>
 
-      <div className="animate-rise w-full" style={{ animationDelay: "120ms" }}>
-        <Card>
-          <CardContent className="space-y-5">
-            <Field
-              icon={IdentityCardIcon}
-              title="Enter your National ID"
-              hint="14 digits. We use it only to look up your transcript."
-            />
-            <form onSubmit={onSubmit} className="space-y-4">
-              <div className="space-y-2.5">
-                <Input
-                  inputMode="numeric"
-                  autoComplete="off"
-                  placeholder="3 0 7 0 4 0 7 1 5 0 1 4 5 2"
-                  value={nationalId}
-                  onChange={(e) =>
-                    setNationalId(
-                      e.target.value.replace(/\D/g, "").slice(0, 14),
-                    )
-                  }
-                  className="h-13 text-center font-mono text-lg tracking-[0.18em] placeholder:tracking-[0.1em] placeholder:text-muted-foreground/40"
-                />
-                <DigitMeter filled={nationalId.length} total={14} />
-              </div>
-              <Button
-                type="submit"
-                className="h-12 w-full text-base font-semibold"
-                disabled={loading}
-              >
-                {loading ? <Spinner /> : "Show my grades"}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+      <form onSubmit={onSubmit} className="mt-12 w-full space-y-3">
+        <Input
+          inputMode="numeric"
+          autoComplete="off"
+          aria-label="National ID"
+          placeholder="National ID"
+          value={nationalId}
+          onChange={(e) =>
+            setNationalId(e.target.value.replace(/\D/g, "").slice(0, 14))
+          }
+          className="h-16 rounded-2xl text-center font-mono text-xl tracking-[0.12em] placeholder:tracking-normal placeholder:font-sans placeholder:text-muted-foreground/50"
+        />
+        <Button
+          type="submit"
+          className="h-16 w-full rounded-2xl text-lg font-semibold"
+          disabled={loading}
+        >
+          {loading ? <Spinner className="size-5" /> : "Show my grades"}
+        </Button>
+      </form>
 
-        <p className="mt-5 text-center text-xs text-muted-foreground/70">
-          Official results are those issued by the faculty's student affairs.
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function DigitMeter({ filled, total }: { filled: number; total: number }) {
-  const ticks = Array.from({ length: total }, (_, i) => `tick-${i}`);
-  return (
-    <div className="flex items-center gap-3">
-      <div className="flex flex-1 gap-1" aria-hidden>
-        {ticks.map((id, i) => (
-          <span
-            key={id}
-            className={`h-1 flex-1 rounded-full transition-colors duration-200 ${
-              i < filled ? "bg-primary" : "bg-border"
-            }`}
-          />
-        ))}
-      </div>
-      <span className="font-mono text-xs tabular-nums text-muted-foreground">
-        {filled}/{total}
-      </span>
-    </div>
-  );
-}
-
-function Field({
-  icon,
-  title,
-  hint,
-}: {
-  icon: typeof IdentityCardIcon;
-  title: string;
-  hint: string;
-}) {
-  return (
-    <div className="flex items-start gap-3">
-      <div className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary/10 ring-1 ring-primary/20">
-        <HugeiconsIcon icon={icon} size={22} className="text-primary" />
-      </div>
-      <div className="space-y-0.5">
-        <h2 className="font-heading font-semibold leading-tight">{title}</h2>
-        <p className="text-sm leading-relaxed text-muted-foreground">{hint}</p>
-      </div>
+      <p className="mt-6 text-xs text-muted-foreground/70">
+        Official results are issued by the faculty's student affairs.
+      </p>
     </div>
   );
 }

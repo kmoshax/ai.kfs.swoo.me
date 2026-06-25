@@ -54,42 +54,41 @@
 }
 
 /*
- * "لوحة النتيجة" — a single deep petrol-ink theme.
- * Brand/actions live in warm gold; data (grades, standing) lives in its own
- * scale of hues so the two vocabularies never get confused.
+ * Zen — a calm, light, near-monochrome system. Ink on warm paper, generous
+ * air, no chrome. The only color is the grade scale, reserved for data so a
+ * student's standing is the single thing on the page that carries hue.
  */
-:root,
-.dark {
-  --background: oklch(0.163 0.021 219);
-  --foreground: oklch(0.962 0.008 210);
+:root {
+  --background: oklch(0.992 0.003 95);
+  --foreground: oklch(0.235 0.01 260);
 
-  --card: oklch(0.206 0.024 219);
-  --card-foreground: oklch(0.962 0.008 210);
-  --popover: oklch(0.224 0.026 219);
-  --popover-foreground: oklch(0.962 0.008 210);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.235 0.01 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.235 0.01 260);
 
-  /* gold — used with restraint for brand + primary action only */
-  --primary: oklch(0.83 0.135 81);
-  --primary-foreground: oklch(0.22 0.04 72);
+  /* ink — brand + primary action, kept monochrome */
+  --primary: oklch(0.255 0.012 260);
+  --primary-foreground: oklch(0.985 0.002 95);
 
-  --secondary: oklch(0.262 0.025 219);
-  --secondary-foreground: oklch(0.95 0.008 210);
-  --muted: oklch(0.238 0.022 219);
-  --muted-foreground: oklch(0.702 0.019 215);
-  --accent: oklch(0.272 0.029 219);
-  --accent-foreground: oklch(0.962 0.008 210);
+  --secondary: oklch(0.965 0.003 95);
+  --secondary-foreground: oklch(0.255 0.012 260);
+  --muted: oklch(0.965 0.003 95);
+  --muted-foreground: oklch(0.555 0.012 260);
+  --accent: oklch(0.965 0.003 95);
+  --accent-foreground: oklch(0.255 0.012 260);
 
-  --destructive: oklch(0.64 0.2 25);
-  --border: oklch(0.92 0.02 215 / 11%);
-  --input: oklch(0.92 0.02 215 / 9%);
-  --ring: oklch(0.83 0.135 81 / 55%);
+  --destructive: oklch(0.55 0.19 26);
+  --border: oklch(0.905 0.004 260);
+  --input: oklch(0.93 0.004 260);
+  --ring: oklch(0.255 0.012 260 / 35%);
 
-  /* grade / standing scale — low to high */
-  --grade-f: oklch(0.66 0.2 25);
-  --grade-d: oklch(0.74 0.16 52);
-  --grade-c: oklch(0.83 0.135 86);
-  --grade-b: oklch(0.74 0.105 222);
-  --grade-a: oklch(0.78 0.14 166);
+  /* grade / standing scale — tuned for legibility on paper, low to high */
+  --grade-f: oklch(0.56 0.18 26);
+  --grade-d: oklch(0.62 0.14 52);
+  --grade-c: oklch(0.64 0.12 78);
+  --grade-b: oklch(0.53 0.12 248);
+  --grade-a: oklch(0.53 0.12 158);
 
   --chart-1: var(--grade-a);
   --chart-2: var(--grade-b);
@@ -97,16 +96,16 @@
   --chart-4: var(--grade-d);
   --chart-5: var(--grade-f);
 
-  --radius: 0.9rem;
+  --radius: 1rem;
 
-  --sidebar: oklch(0.206 0.024 219);
-  --sidebar-foreground: oklch(0.962 0.008 210);
-  --sidebar-primary: oklch(0.83 0.135 81);
-  --sidebar-primary-foreground: oklch(0.22 0.04 72);
-  --sidebar-accent: oklch(0.272 0.029 219);
-  --sidebar-accent-foreground: oklch(0.962 0.008 210);
-  --sidebar-border: oklch(0.92 0.02 215 / 11%);
-  --sidebar-ring: oklch(0.83 0.135 81 / 55%);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.235 0.01 260);
+  --sidebar-primary: oklch(0.255 0.012 260);
+  --sidebar-primary-foreground: oklch(0.985 0.002 95);
+  --sidebar-accent: oklch(0.965 0.003 95);
+  --sidebar-accent-foreground: oklch(0.255 0.012 260);
+  --sidebar-border: oklch(0.905 0.004 260);
+  --sidebar-ring: oklch(0.255 0.012 260 / 35%);
 }
 
 @layer base {
@@ -130,50 +129,11 @@
   }
 }
 
-/*
- * Ambient backdrop: a quiet gold dawn at the top of the page over a faint
- * engineering grid. Evokes the "instrument panel" without noise.
- */
-.aurora {
-  background-color: var(--background);
-  background-image:
-    radial-gradient(
-      90% 60% at 50% -10%,
-      oklch(0.83 0.135 81 / 14%),
-      transparent 60%
-    ),
-    radial-gradient(
-      50% 40% at 85% 8%,
-      oklch(0.74 0.105 222 / 10%),
-      transparent 70%
-    ), linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size:
-    100% 100%,
-    100% 100%,
-    44px 44px,
-    44px 44px;
-  background-position:
-    center top,
-    center top,
-    center top,
-    center top;
-}
-.aurora::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  /* fade the grid out toward the bottom so it never competes with content */
-  background: linear-gradient(to bottom, transparent, var(--background) 70%);
-}
-
-/* One orchestrated entrance, used sparingly. */
+/* One quiet entrance — a soft fade up, nothing more. */
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -181,14 +141,11 @@
   }
 }
 .animate-rise {
-  animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .animate-rise {
     animation: none;
-  }
-  * {
-    transition-duration: 0.001ms !important;
   }
 }

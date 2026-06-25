@@ -39,7 +39,7 @@ export default function RootLayout({
     <html
       lang="en"
       dir="ltr"
-      className={`${body.variable} ${heading.variable} ${mono.variable} dark h-full antialiased`}
+      className={`${body.variable} ${heading.variable} ${mono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
         <DirectionProvider direction="ltr">{children}</DirectionProvider>

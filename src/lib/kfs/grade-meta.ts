@@ -1,7 +1,7 @@
 /** Presentation helpers for grades + GPA (pure, safe on the client). */
 
 /** Maps a letter grade to one of the five data hues defined in globals.css. */
-export function gradeVar(grade: string): string {
+export function gradeColor(grade: string): string {
   const g = grade.replace(/\s+/g, "").toUpperCase();
   if (g.startsWith("A")) return "var(--grade-a)";
   if (g.startsWith("B")) return "var(--grade-b)";
@@ -9,16 +9,6 @@ export function gradeVar(grade: string): string {
   if (g.startsWith("D")) return "var(--grade-d)";
   if (g.startsWith("F")) return "var(--grade-f)";
   return "var(--muted-foreground)";
-}
-
-/** Inline styles for the grade chip — color, hairline ring, faint fill. */
-export function gradeChipStyle(grade: string): React.CSSProperties {
-  const c = gradeVar(grade);
-  return {
-    color: c,
-    borderColor: `color-mix(in oklch, ${c} 38%, transparent)`,
-    backgroundColor: `color-mix(in oklch, ${c} 13%, transparent)`,
-  };
 }
 
 export function scoreColor(score: number | null): string {
@@ -30,11 +20,7 @@ export function scoreColor(score: number | null): string {
   return "var(--grade-f)";
 }
 
-/**
- * Official standing bands on the 4.0 scale. Segment widths in the GPA ladder
- * are derived from these thresholds, so the visual scale and the textual
- * label always agree — the structure encodes the real classification.
- */
+/** Official standing bands on the 4.0 scale — the label/color for a GPA. */
 export const GPA_BANDS = [
   { label: "Poor", min: 0, color: "var(--grade-f)" },
   { label: "Pass", min: 2.0, color: "var(--grade-d)" },
@@ -44,17 +30,6 @@ export const GPA_BANDS = [
 ] as const;
 
 export const GPA_MAX = 4.0;
-
-/** Per-segment geometry for the ladder, in left-to-right (low→high) order. */
-export function gpaLadder() {
-  return GPA_BANDS.map((band, i) => {
-    const next = GPA_BANDS[i + 1]?.min ?? GPA_MAX;
-    return {
-      ...band,
-      width: ((next - band.min) / GPA_MAX) * 100,
-    };
-  });
-}
 
 /** Faculty/level come from the (Arabic) upstream page — present them in English. */
 export function enFaculty(faculty: string | null): string {
