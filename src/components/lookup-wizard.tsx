@@ -135,102 +135,107 @@ export function LookupWizard({ initialId }: { initialId?: string }) {
 
   if (booting) {
     return (
-      <div className="flex flex-col items-center gap-4 text-center">
+      <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
         <Spinner className="size-6 text-muted-foreground" />
         <p className="text-sm text-muted-foreground">Loading result…</p>
       </div>
     );
   }
 
-  if (result) return <ResultView result={result} onReset={reset} />;
+  if (result)
+    return (
+      <div className="flex flex-1 flex-col items-center px-6 py-10 sm:py-14">
+        <ResultView result={result} onReset={reset} />
+      </div>
+    );
 
   if (reseed) {
     return (
-      <div className="animate-rise w-full max-w-sm text-center">
-        <h2 className="font-heading text-2xl font-semibold tracking-tight">
-          One quick check
-        </h2>
-        <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
-          Type the code below to continue. This rarely happens.
-        </p>
+      <div className="flex flex-1 items-center justify-center px-6 py-12">
+        <div className="animate-rise w-full max-w-sm text-center">
+          <h2 className="font-heading text-2xl font-semibold tracking-tight">
+            One quick check
+          </h2>
+          <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            Type the code below to continue. This rarely happens.
+          </p>
 
-        <div className="mt-8 flex justify-center">
-          {/* biome-ignore lint/performance/noImgElement: captcha is a per-request data: URL, next/image cannot optimize it */}
-          <img
-            src={reseed.captcha}
-            alt="Verification code"
-            className="h-14 rounded-lg border border-border bg-white px-2"
-            style={{ imageRendering: "pixelated" }}
-          />
-        </div>
+          <div className="mt-8 flex justify-center">
+            {/* biome-ignore lint/performance/noImgElement: captcha is a per-request data: URL, next/image cannot optimize it */}
+            <img
+              src={reseed.captcha}
+              alt="Verification code"
+              className="h-14 rounded-lg border border-border bg-white px-2"
+              style={{ imageRendering: "pixelated" }}
+            />
+          </div>
 
-        <form onSubmit={onReseed} className="mt-6 space-y-3">
-          <Input
-            ref={captchaRef}
-            inputMode="numeric"
-            autoComplete="off"
-            placeholder="Code"
-            value={captcha}
-            onChange={(e) => setCaptcha(e.target.value.replace(/\D/g, ""))}
-            className="h-14 rounded-2xl text-center font-mono text-xl tracking-[0.4em]"
-          />
-          <Button
-            type="submit"
-            className="h-14 w-full rounded-2xl text-base"
-            disabled={loading}
+          <form onSubmit={onReseed} className="mt-6 space-y-3">
+            <Input
+              ref={captchaRef}
+              inputMode="numeric"
+              autoComplete="off"
+              placeholder="Code"
+              value={captcha}
+              onChange={(e) => setCaptcha(e.target.value.replace(/\D/g, ""))}
+              className="h-14 rounded-2xl text-center font-mono text-xl tracking-[0.4em]"
+            />
+            <Button
+              type="submit"
+              className="h-14 w-full rounded-2xl text-base"
+              disabled={loading}
+            >
+              {loading ? <Spinner /> : "Continue"}
+            </Button>
+          </form>
+
+          <button
+            type="button"
+            onClick={reset}
+            className="mt-5 text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
           >
-            {loading ? <Spinner /> : "Continue"}
-          </Button>
-        </form>
-
-        <button
-          type="button"
-          onClick={reset}
-          className="mt-5 text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
-        >
-          Cancel
-        </button>
+            Cancel
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="animate-rise flex w-full max-w-md flex-col items-center text-center">
-      <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+    <div className="animate-rise flex flex-1 flex-col px-6 py-10 sm:px-10 sm:py-12">
+      <p className="text-center text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">
         Kafr El-Sheikh · Faculty of AI
       </p>
 
-      <h1 className="mt-6 font-heading text-5xl font-semibold leading-[1.05] tracking-tight text-balance sm:text-6xl">
-        Know your result.
-      </h1>
+      <div className="flex flex-1 flex-col items-center justify-center gap-14 py-12">
+        <h1 className="font-heading text-6xl font-semibold leading-[0.98] tracking-tight text-balance sm:text-7xl lg:text-8xl">
+          Know your result.
+        </h1>
 
-      <p className="mt-5 max-w-sm text-lg leading-relaxed text-muted-foreground text-balance">
-        Your grades and GPA from your National ID. No code, no password.
-      </p>
+        <form onSubmit={onSubmit} className="w-full max-w-lg space-y-3">
+          <Input
+            inputMode="numeric"
+            autoComplete="off"
+            aria-label="National ID"
+            placeholder="National ID"
+            value={nationalId}
+            onChange={(e) =>
+              setNationalId(e.target.value.replace(/\D/g, "").slice(0, 14))
+            }
+            className="h-16 rounded-2xl text-center font-mono text-xl tracking-[0.12em] placeholder:tracking-normal placeholder:font-sans placeholder:text-muted-foreground/50"
+          />
+          <Button
+            type="submit"
+            className="h-16 w-full rounded-2xl text-lg font-semibold"
+            disabled={loading}
+          >
+            {loading ? <Spinner className="size-5" /> : "Show my grades"}
+          </Button>
+        </form>
+      </div>
 
-      <form onSubmit={onSubmit} className="mt-12 w-full space-y-3">
-        <Input
-          inputMode="numeric"
-          autoComplete="off"
-          aria-label="National ID"
-          placeholder="National ID"
-          value={nationalId}
-          onChange={(e) =>
-            setNationalId(e.target.value.replace(/\D/g, "").slice(0, 14))
-          }
-          className="h-16 rounded-2xl text-center font-mono text-xl tracking-[0.12em] placeholder:tracking-normal placeholder:font-sans placeholder:text-muted-foreground/50"
-        />
-        <Button
-          type="submit"
-          className="h-16 w-full rounded-2xl text-lg font-semibold"
-          disabled={loading}
-        >
-          {loading ? <Spinner className="size-5" /> : "Show my grades"}
-        </Button>
-      </form>
-
-      <p className="mt-6 text-xs text-muted-foreground/70">
-        Official results are issued by the faculty's student affairs.
+      <p className="text-center text-xs tracking-wide text-muted-foreground/50">
+        ai.kfs.swoo.me
       </p>
     </div>
   );

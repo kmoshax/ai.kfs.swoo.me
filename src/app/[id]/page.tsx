@@ -11,7 +11,7 @@ export default async function SharedResult({
   const initialId = /^\d{14}$/.test(id) ? id : undefined;
 
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-center px-6 py-20">
+    <main className="flex min-h-dvh flex-col">
       <LookupWizard initialId={initialId} />
     </main>
   );
