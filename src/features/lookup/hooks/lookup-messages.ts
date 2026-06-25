@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import type { LookupErrorReason } from "@/shared/types";
+import type { LookupErrorReason } from "@/types";
 
 export function toastLookupFailure(reason: LookupErrorReason) {
   if (reason === "not_found")

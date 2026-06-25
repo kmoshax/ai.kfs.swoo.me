@@ -1,4 +1,4 @@
-import type { Identity, Transcript } from "@/shared/types";
+import type { Identity, Transcript } from "@/types";
 import { enFaculty, enLevel } from "../../presentation";
 
 type IdentityHeaderProps = {

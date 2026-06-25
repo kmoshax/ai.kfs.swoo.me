@@ -1,7 +1,7 @@
 import { Loading03Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type * as React from "react";
-import { cn } from "@/shared/lib";
+import { cn } from "@/lib";
 
 function Spinner({
   className,

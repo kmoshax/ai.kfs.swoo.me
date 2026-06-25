@@ -6,7 +6,7 @@ import {
   seedToForm,
 } from "@/server/kfs/cache";
 import { submitGetmail } from "@/server/kfs/scraper";
-import type { Identity } from "@/shared/types";
+import type { Identity } from "@/types";
 import { LookupError, SeedExpired } from "./errors";
 
 export async function resolveIdentity(nationalId: string): Promise<Identity> {

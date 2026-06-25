@@ -1,4 +1,4 @@
-import type { LookupResponse, ReseedResponse } from "@/shared/types";
+import type { LookupResponse, ReseedResponse } from "@/types";
 
 export async function api<T>(body: Record<string, unknown>): Promise<T> {
   const res = await fetch("/api/lookup", {

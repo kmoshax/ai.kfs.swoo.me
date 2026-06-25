@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import type { Page } from "@/shared/types";
+import type { Page } from "@/types";
 
 export interface Seed {
   cookies: Record<string, string>;

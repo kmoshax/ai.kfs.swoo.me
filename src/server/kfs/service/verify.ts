@@ -3,7 +3,7 @@ import {
   submitGetmail,
   submitNewresult,
 } from "@/server/kfs/scraper";
-import type { Page } from "@/shared/types";
+import type { Page } from "@/types";
 import { PROBE } from "./probe";
 
 export async function verifySeed(

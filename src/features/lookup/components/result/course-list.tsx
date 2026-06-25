@@ -1,4 +1,4 @@
-import type { CourseComputed } from "@/shared/types";
+import type { CourseComputed } from "@/types";
 
 export function CourseList({ courses }: { courses: CourseComputed[] }) {
   return (

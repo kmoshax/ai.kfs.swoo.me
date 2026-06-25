@@ -1,4 +1,4 @@
-import type { Page } from "@/shared/types";
+import type { Page } from "@/types";
 
 export class SeedExpired extends Error {
   constructor(public page: Page) {

@@ -6,7 +6,7 @@ import {
 } from "@/server/kfs/cache";
 import { computeGpa } from "@/server/kfs/gpa";
 import { submitNewresult } from "@/server/kfs/scraper";
-import type { LookupResult } from "@/shared/types";
+import type { LookupResult } from "@/types";
 import { LookupError, SeedExpired } from "./errors";
 import { resolveIdentity } from "./identity";
 

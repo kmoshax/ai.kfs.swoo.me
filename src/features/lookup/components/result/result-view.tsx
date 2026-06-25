@@ -1,6 +1,6 @@
 "use client";
 
-import type { LookupResult } from "@/shared/types";
+import type { LookupResult } from "@/types";
 import {
   useCountUp,
   useDownloadImage,

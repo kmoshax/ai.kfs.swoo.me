@@ -1,4 +1,4 @@
-import type { LookupResult } from "@/shared/types";
+import type { LookupResult } from "@/types";
 import { GRADES_TTL, type GradesDoc, gradesCache } from "./cache-state";
 import { COLLECTIONS, getDb } from "./db";
 import { diskLoad, diskPersist } from "./disk-store";

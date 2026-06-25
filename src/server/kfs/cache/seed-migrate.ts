@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import type { Page } from "@/shared/types";
+import type { Page } from "@/types";
 import { COLLECTIONS, getDb } from "./db";
 import { SEED_FILE, type SeedDoc, type SeedMap } from "./seed-state";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import type { RefObject } from "react";
-import { Button, Input, Spinner } from "@/shared/ui";
+import { Button, Input, Spinner } from "@/components/ui";
 import { CaptchaImage } from "./captcha-image";
 
 type ReseedFormProps = {

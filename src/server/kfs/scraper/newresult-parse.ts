@@ -1,4 +1,4 @@
-import type { Transcript } from "@/shared/types";
+import type { Transcript } from "@/types";
 import { parseTranscript } from "./transcript";
 
 export type GradesResult =

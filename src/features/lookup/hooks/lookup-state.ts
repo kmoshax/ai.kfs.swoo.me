@@ -1,5 +1,5 @@
 import type { Dispatch, RefObject, SetStateAction } from "react";
-import type { LookupResult, Page } from "@/shared/types";
+import type { LookupResult, Page } from "@/types";
 
 export type Reseed = { page: Page; seedId: string; captcha: string };
 

@@ -2,7 +2,7 @@
 
 import type { Link01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Spinner } from "@/shared/ui";
+import { Spinner } from "@/components/ui";
 
 export function ToolbarButton({
   onClick,

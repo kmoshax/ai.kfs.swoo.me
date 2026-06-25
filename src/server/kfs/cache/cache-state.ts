@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import type { Identity, LookupResult } from "@/shared/types";
+import type { Identity, LookupResult } from "@/types";
 import type { ReseedSession } from "./reseed-store";
 
 export const GRADES_TTL = 30 * 24 * 60 * 60 * 1000;

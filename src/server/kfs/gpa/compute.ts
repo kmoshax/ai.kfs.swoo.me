@@ -1,4 +1,4 @@
-import type { CourseComputed, GpaResult } from "@/shared/types";
+import type { CourseComputed, GpaResult } from "@/types";
 import { creditHoursFor } from "./credit-hours";
 import { gradePointsFor } from "./scale";
 

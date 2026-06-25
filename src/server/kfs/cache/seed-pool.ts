@@ -1,4 +1,4 @@
-import type { Page } from "@/shared/types";
+import type { Page } from "@/types";
 import { COLLECTIONS, getDb } from "./db";
 import { diskLoad, diskPersist, type Seed, type SeedDoc } from "./seed-state";
 

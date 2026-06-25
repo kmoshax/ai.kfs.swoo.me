@@ -1,5 +1,5 @@
 import type { FormState } from "@/server/kfs/scraper";
-import type { Page } from "@/shared/types";
+import type { Page } from "@/types";
 import { RESEED_TTL, reseeds } from "./cache-state";
 
 export interface ReseedSession {

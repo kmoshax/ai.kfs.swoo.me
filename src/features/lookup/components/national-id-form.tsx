@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input, Spinner } from "@/shared/ui";
+import { Button, Input, Spinner } from "@/components/ui";
 
 type NationalIdFormProps = {
   nationalId: string;

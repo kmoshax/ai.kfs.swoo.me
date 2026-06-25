@@ -1,4 +1,4 @@
-import type { Identity } from "@/shared/types";
+import type { Identity } from "@/types";
 import { type IdentityDoc, identityCache } from "./cache-state";
 import { COLLECTIONS, getDb } from "./db";
 import { diskLoad, diskPersist } from "./disk-store";

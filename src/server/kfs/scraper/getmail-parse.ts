@@ -1,4 +1,4 @@
-import type { Identity } from "@/shared/types";
+import type { Identity } from "@/types";
 import { cellAfter, decode } from "./html";
 
 export type GetmailResult =

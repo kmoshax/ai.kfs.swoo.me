@@ -7,7 +7,7 @@ import {
   setSeed,
 } from "@/server/kfs/cache";
 import { startGetmail, startNewresult } from "@/server/kfs/scraper";
-import type { Page } from "@/shared/types";
+import type { Page } from "@/types";
 import { verifySeed } from "./verify";
 
 export async function startReseed(

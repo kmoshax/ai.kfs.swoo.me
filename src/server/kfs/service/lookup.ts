@@ -1,5 +1,5 @@
 import { getCachedGrades, peekCachedGrades } from "@/server/kfs/cache";
-import type { LookupResult } from "@/shared/types";
+import type { LookupResult } from "@/types";
 import { SeedExpired } from "./errors";
 import { fetchFreshGrades } from "./fetch-fresh";
 import { ensureInit } from "./init";

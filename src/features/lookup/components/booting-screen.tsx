@@ -1,4 +1,4 @@
-import { Spinner } from "@/shared/ui";
+import { Spinner } from "@/components/ui";
 
 export function BootingScreen() {
   return (

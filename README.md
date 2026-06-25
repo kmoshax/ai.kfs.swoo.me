@@ -23,16 +23,19 @@ file) because the university caps how many times each student may view a result.
 ```
 src/
   app/         Next.js routes (thin: layout, pages, API handler)
+  components/  UI primitives (components/ui)
   config/      Fonts and site metadata
   features/    Feature modules — UI + hooks + client (logic lives in hooks)
     lookup/
+  lib/         Cross-cutting helpers (cn)
   server/      Server-only domain logic
     kfs/
       scraper/ ASP.NET session handling and HTML parsing
       cache/   MongoDB / disk caches and the shared seed pool
       gpa/     Credit-hour and grade-point GPA computation
       service/ Orchestration: lookup, re-seed, keep-alive
-  shared/      Cross-cutting types, UI primitives, helpers, styles
+  styles/      Global stylesheet, split into design-system partials
+  types/       Shared domain and API types
 ```
 
 Conventions: no file exceeds 50 lines, every module re-exports through a barrel

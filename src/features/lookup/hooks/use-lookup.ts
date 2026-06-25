@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import type { LookupResult } from "@/shared/types";
+import type { LookupResult } from "@/types";
 import type { LookupState, Reseed } from "./lookup-state";
 import { useBootLookup } from "./use-boot-lookup";
 import { useLookupActions } from "./use-lookup-actions";

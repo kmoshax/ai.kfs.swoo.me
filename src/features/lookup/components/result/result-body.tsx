@@ -1,5 +1,5 @@
 import type { RefObject } from "react";
-import type { LookupResult } from "@/shared/types";
+import type { LookupResult } from "@/types";
 import { CourseList } from "./course-list";
 import { GpaSummary } from "./gpa-summary";
 import { IdentityHeader } from "./identity-header";

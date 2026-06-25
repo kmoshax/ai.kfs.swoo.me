@@ -1,4 +1,4 @@
-import type { Course, Transcript } from "@/shared/types";
+import type { Course, Transcript } from "@/types";
 import { cellAfter, decode } from "./html";
 
 export function parseTranscript(html: string): Transcript {

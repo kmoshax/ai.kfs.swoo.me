@@ -1,7 +1,7 @@
+import { DirectionProvider, Toaster } from "@/components/ui";
 import { fontVariables } from "@/config/fonts";
 import { siteMetadata } from "@/config/metadata";
-import { DirectionProvider, Toaster } from "@/shared/ui";
-import "@/shared/styles/globals.css";
+import "@/styles/globals.css";
 
 export const metadata = siteMetadata;
 

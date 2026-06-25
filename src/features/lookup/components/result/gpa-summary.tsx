@@ -1,4 +1,4 @@
-import type { GpaResult } from "@/shared/types";
+import type { GpaResult } from "@/types";
 import { GPA_MAX } from "../../presentation";
 
 type GpaSummaryProps = {
