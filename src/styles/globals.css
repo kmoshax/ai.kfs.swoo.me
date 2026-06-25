@@ -8,8 +8,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-heading);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -39,6 +39,11 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-grade-a: var(--grade-a);
+  --color-grade-b: var(--grade-b);
+  --color-grade-c: var(--grade-c);
+  --color-grade-d: var(--grade-d);
+  --color-grade-f: var(--grade-f);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -48,73 +53,60 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
+/*
+ * "لوحة النتيجة" — a single deep petrol-ink theme.
+ * Brand/actions live in warm gold; data (grades, standing) lives in its own
+ * scale of hues so the two vocabularies never get confused.
+ */
+:root,
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: oklch(0.163 0.021 219);
+  --foreground: oklch(0.962 0.008 210);
+
+  --card: oklch(0.206 0.024 219);
+  --card-foreground: oklch(0.962 0.008 210);
+  --popover: oklch(0.224 0.026 219);
+  --popover-foreground: oklch(0.962 0.008 210);
+
+  /* gold — used with restraint for brand + primary action only */
+  --primary: oklch(0.83 0.135 81);
+  --primary-foreground: oklch(0.22 0.04 72);
+
+  --secondary: oklch(0.262 0.025 219);
+  --secondary-foreground: oklch(0.95 0.008 210);
+  --muted: oklch(0.238 0.022 219);
+  --muted-foreground: oklch(0.702 0.019 215);
+  --accent: oklch(0.272 0.029 219);
+  --accent-foreground: oklch(0.962 0.008 210);
+
+  --destructive: oklch(0.64 0.2 25);
+  --border: oklch(0.92 0.02 215 / 11%);
+  --input: oklch(0.92 0.02 215 / 9%);
+  --ring: oklch(0.83 0.135 81 / 55%);
+
+  /* grade / standing scale — low to high */
+  --grade-f: oklch(0.66 0.2 25);
+  --grade-d: oklch(0.74 0.16 52);
+  --grade-c: oklch(0.83 0.135 86);
+  --grade-b: oklch(0.74 0.105 222);
+  --grade-a: oklch(0.78 0.14 166);
+
+  --chart-1: var(--grade-a);
+  --chart-2: var(--grade-b);
+  --chart-3: var(--grade-c);
+  --chart-4: var(--grade-d);
+  --chart-5: var(--grade-f);
+
+  --radius: 0.9rem;
+
+  --sidebar: oklch(0.206 0.024 219);
+  --sidebar-foreground: oklch(0.962 0.008 210);
+  --sidebar-primary: oklch(0.83 0.135 81);
+  --sidebar-primary-foreground: oklch(0.22 0.04 72);
+  --sidebar-accent: oklch(0.272 0.029 219);
+  --sidebar-accent-foreground: oklch(0.962 0.008 210);
+  --sidebar-border: oklch(0.92 0.02 215 / 11%);
+  --sidebar-ring: oklch(0.83 0.135 81 / 55%);
 }
 
 @layer base {
@@ -130,5 +122,73 @@
   }
   html {
     @apply font-sans;
+  }
+  /* Arabic-Indic numerals line up like data, not prose */
+  .tnum {
+    font-feature-settings: "tnum" 1;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/*
+ * Ambient backdrop: a quiet gold dawn at the top of the page over a faint
+ * engineering grid. Evokes the "instrument panel" without noise.
+ */
+.aurora {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(
+      90% 60% at 50% -10%,
+      oklch(0.83 0.135 81 / 14%),
+      transparent 60%
+    ),
+    radial-gradient(
+      50% 40% at 85% 8%,
+      oklch(0.74 0.105 222 / 10%),
+      transparent 70%
+    ), linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    100% 100%,
+    44px 44px,
+    44px 44px;
+  background-position:
+    center top,
+    center top,
+    center top,
+    center top;
+}
+.aurora::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  /* fade the grid out toward the bottom so it never competes with content */
+  background: linear-gradient(to bottom, transparent, var(--background) 70%);
+}
+
+/* One orchestrated entrance, used sparingly. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-rise {
+  animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise {
+    animation: none;
+  }
+  * {
+    transition-duration: 0.001ms !important;
   }
 }
