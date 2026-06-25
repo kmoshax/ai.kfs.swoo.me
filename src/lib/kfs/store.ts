@@ -169,6 +169,27 @@ export async function getCachedGrades(
   return r;
 }
 
+/**
+ * Like getCachedGrades but ignores the TTL and never deletes — used to serve a
+ * student who already exists in the DB rather than sending them to a captcha
+ * when the shared upstream seed is temporarily dead.
+ */
+export async function peekCachedGrades(
+  nationalId: string,
+): Promise<LookupResult | undefined> {
+  const db = await getDb();
+  if (db) {
+    const doc = await db
+      .collection<GradesDoc>(COLLECTIONS.grades)
+      .findOne({ _id: nationalId });
+    if (!doc) return undefined;
+    const { _id, ...result } = doc;
+    return result;
+  }
+  diskLoad();
+  return gradesCache.get(nationalId);
+}
+
 export async function dropCachedGrades(nationalId: string): Promise<void> {
   const db = await getDb();
   if (db) {

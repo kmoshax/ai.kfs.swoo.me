@@ -35,6 +35,7 @@ import {
   type LookupResult,
   migrateCacheToDb,
   newSid,
+  peekCachedGrades,
   putReseed,
 } from "./store";
 
@@ -100,6 +101,21 @@ export async function lookupGrades(nationalId: string): Promise<LookupResult> {
   const cached = await getCachedGrades(nationalId);
   if (cached) return { ...cached, cached: true };
 
+  try {
+    return await fetchFreshGrades(nationalId);
+  } catch (err) {
+    // A student already in the DB should never be sent to a captcha. If the
+    // shared seed is dead, serve their stored copy (even past its TTL) instead.
+    if (err instanceof SeedExpired) {
+      const stale = await peekCachedGrades(nationalId);
+      if (stale) return { ...stale, cached: true };
+    }
+    throw err;
+  }
+}
+
+/** Hit the upstream system for a student not served from cache. */
+async function fetchFreshGrades(nationalId: string): Promise<LookupResult> {
   const identity = await resolveIdentity(nationalId);
 
   const seed = await getSeed("newresult");

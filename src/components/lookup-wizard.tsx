@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { ResultView } from "@/components/result-view";
 import { Button } from "@/components/ui/button";
@@ -24,12 +24,19 @@ async function api<T>(body: Record<string, unknown>): Promise<T> {
   return (await res.json()) as T;
 }
 
-export function LookupWizard() {
-  const [nationalId, setNationalId] = useState("");
+/** Reflect the looked-up student in the URL so the page is shareable. */
+function syncUrl(nid: string | null) {
+  if (typeof window === "undefined") return;
+  window.history.replaceState(null, "", nid ? `/${nid}` : "/");
+}
+
+export function LookupWizard({ initialId }: { initialId?: string }) {
+  const [nationalId, setNationalId] = useState(initialId ?? "");
   const [result, setResult] = useState<LookupResult | null>(null);
   const [reseed, setReseed] = useState<Reseed | null>(null);
   const [captcha, setCaptcha] = useState("");
   const [loading, setLoading] = useState(false);
+  const [booting, setBooting] = useState(!!initialId);
   const captchaRef = useRef<HTMLInputElement>(null);
 
   function reset() {
@@ -37,6 +44,7 @@ export function LookupWizard() {
     setReseed(null);
     setNationalId("");
     setCaptcha("");
+    syncUrl(null);
   }
 
   async function runLookup(nid: string) {
@@ -47,6 +55,7 @@ export function LookupWizard() {
     if (res.ok) {
       setReseed(null);
       setResult(res.result);
+      syncUrl(nid);
       return;
     }
     if (res.reason === "reseed") {
@@ -63,6 +72,23 @@ export function LookupWizard() {
       toast.error("You've reached the maximum number of result views.");
     else toast.error("Something went wrong. Please try again shortly.");
   }
+
+  // Shared link (/<nationalId>): look it up automatically on first load.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: run once on mount
+  useEffect(() => {
+    if (!initialId) return;
+    (async () => {
+      setLoading(true);
+      try {
+        await runLookup(initialId);
+      } catch {
+        toast.error("Couldn't connect. Try again.");
+      } finally {
+        setLoading(false);
+        setBooting(false);
+      }
+    })();
+  }, []);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -105,6 +131,15 @@ export function LookupWizard() {
     } finally {
       setLoading(false);
     }
+  }
+
+  if (booting) {
+    return (
+      <div className="flex flex-col items-center gap-4 text-center">
+        <Spinner className="size-6 text-muted-foreground" />
+        <p className="text-sm text-muted-foreground">Loading result…</p>
+      </div>
+    );
   }
 
   if (result) return <ResultView result={result} onReset={reset} />;

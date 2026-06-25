@@ -1,8 +1,9 @@
 "use client";
 
-import { ArrowLeft01Icon } from "@hugeicons/core-free-icons";
+import { ArrowLeft01Icon, Link01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import {
   enFaculty,
   enLevel,
@@ -49,6 +50,15 @@ function useCountUp(target: number | null, reduced: boolean) {
   return value;
 }
 
+async function copyLink() {
+  try {
+    await navigator.clipboard.writeText(window.location.href);
+    toast.success("Link copied");
+  } catch {
+    toast.error("Couldn't copy the link.");
+  }
+}
+
 export function ResultView({
   result,
   onReset,
@@ -72,92 +82,112 @@ export function ResultView({
   const level = enLevel(transcript.level);
 
   return (
-    <div className="animate-rise w-full max-w-xl">
-      <button
-        type="button"
-        onClick={onReset}
-        className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-      >
-        <HugeiconsIcon
-          icon={ArrowLeft01Icon}
-          size={16}
-          className="transition-transform group-hover:-translate-x-0.5"
-        />
-        New search
-      </button>
-
-      {/* Identity */}
-      <header className="mt-10">
-        <h1 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
-          {identity.name}
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {enFaculty(transcript.faculty)}
-          {level && ` · ${level}`}
-          <span className="font-mono"> · ID {identity.code}</span>
-          {result.cached && " · cached"}
-        </p>
-      </header>
-
-      {/* GPA — the verdict */}
-      <section className="mt-14 text-center">
-        <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-          Cumulative GPA
-        </p>
-        <div className="mt-3 flex items-baseline justify-center gap-3">
-          <span
-            className="font-heading text-7xl font-semibold leading-none tabular-nums sm:text-8xl"
-            style={{ color: standing.color }}
-          >
-            {shown !== null ? shown.toFixed(2) : "—"}
-          </span>
-          <span className="text-2xl font-medium text-muted-foreground">
-            / {GPA_MAX.toFixed(1)}
-          </span>
-        </div>
-        <p
-          className="mt-4 font-heading text-xl font-semibold"
-          style={{ color: standing.color }}
+    <div className="animate-rise w-full max-w-4xl">
+      {/* Top bar */}
+      <div className="flex items-center justify-between">
+        <button
+          type="button"
+          onClick={onReset}
+          className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
-          {standing.label}
-        </p>
+          <HugeiconsIcon
+            icon={ArrowLeft01Icon}
+            size={16}
+            className="transition-transform group-hover:-translate-x-0.5"
+          />
+          New search
+        </button>
+        <button
+          type="button"
+          onClick={copyLink}
+          className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:border-foreground/20 hover:text-foreground"
+        >
+          <HugeiconsIcon icon={Link01Icon} size={15} />
+          Copy link
+        </button>
+      </div>
 
-        {gpa.gpa !== null && (
-          <div className="mx-auto mt-8 h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-muted">
-            <div
-              className="h-full rounded-full transition-[width] duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-              style={{ width: `${filled}%`, backgroundColor: standing.color }}
-            />
-          </div>
-        )}
-      </section>
+      <div className="mt-8 grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+        {/* Left: identity + GPA verdict */}
+        <div className="lg:sticky lg:top-12 lg:self-start">
+          <header>
+            <h1 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
+              {identity.name}
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {enFaculty(transcript.faculty)}
+              {level && ` · ${level}`}
+              <span className="font-mono"> · ID {identity.code}</span>
+              {result.cached && " · cached"}
+            </p>
+          </header>
 
-      {/* Courses */}
-      <section className="mt-16">
-        <ul className="divide-y divide-border">
-          {gpa.courses.map((c) => (
-            <li key={c.name} className="flex items-center gap-4 py-5">
+          <section className="mt-12 text-center lg:mt-14">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+              Cumulative GPA
+            </p>
+            <div className="mt-3 flex items-baseline justify-center gap-3">
               <span
-                className="w-9 shrink-0 font-heading text-xl font-semibold"
-                style={{ color: gradeColor(c.grade) }}
+                className="font-heading text-6xl font-semibold leading-none tabular-nums sm:text-7xl"
+                style={{ color: standing.color }}
               >
-                {c.grade}
+                {shown !== null ? shown.toFixed(2) : "—"}
               </span>
-              <span className="min-w-0 flex-1 truncate text-base">
-                {c.name}
+              <span className="text-2xl font-medium text-muted-foreground">
+                / {GPA_MAX.toFixed(1)}
               </span>
-              <span
-                className="shrink-0 text-xl font-semibold tabular-nums"
-                style={{ color: scoreColor(c.score) }}
-              >
-                {c.score !== null ? c.score : "—"}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
+            </div>
+            <p
+              className="mt-4 font-heading text-xl font-semibold"
+              style={{ color: standing.color }}
+            >
+              {standing.label}
+            </p>
 
-      <footer className="mt-12 space-y-3 text-center">
+            {gpa.gpa !== null && (
+              <div className="mx-auto mt-8 h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-muted">
+                <div
+                  className="h-full rounded-full transition-[width] duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  style={{
+                    width: `${filled}%`,
+                    backgroundColor: standing.color,
+                  }}
+                />
+              </div>
+            )}
+          </section>
+        </div>
+
+        {/* Right: courses */}
+        <section>
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+            Courses
+          </p>
+          <ul className="mt-2 divide-y divide-border">
+            {gpa.courses.map((c) => (
+              <li key={c.name} className="flex items-center gap-4 py-4 sm:py-5">
+                <span
+                  className="w-9 shrink-0 font-heading text-lg font-semibold sm:text-xl"
+                  style={{ color: gradeColor(c.grade) }}
+                >
+                  {c.grade}
+                </span>
+                <span className="min-w-0 flex-1 truncate text-sm sm:text-base">
+                  {c.name}
+                </span>
+                <span
+                  className="shrink-0 text-lg font-semibold tabular-nums sm:text-xl"
+                  style={{ color: scoreColor(c.score) }}
+                >
+                  {c.score !== null ? c.score : "—"}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+
+      <footer className="mt-14 space-y-3 text-center">
         {gpa.provisional && (
           <p className="text-xs text-muted-foreground">
             Some credit hours are estimated, so the GPA may shift slightly.
