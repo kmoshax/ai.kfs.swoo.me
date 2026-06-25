@@ -50,11 +50,6 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-| Variable      | Required | Description                                        |
-| ------------- | -------- | -------------------------------------------------- |
-| `MONGODB_URI` | no       | Mongo connection string; omit to use disk fallback |
-| `MONGODB_DB`  | no       | Database name (defaults to `kfs_results`)          |
-
 ## Scripts
 
 - `bun dev` — start the dev server
