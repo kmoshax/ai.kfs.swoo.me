@@ -113,10 +113,16 @@ export function ResultView({
     }
   }
 
+  const half = Math.ceil(gpa.courses.length / 2);
+  const columns = [
+    { key: "left", items: gpa.courses.slice(0, half) },
+    { key: "right", items: gpa.courses.slice(half) },
+  ];
+
   return (
-    <div className="animate-rise w-full max-w-3xl">
+    <div className="animate-rise w-full max-w-5xl">
       {/* Top bar (excluded from the downloaded image) */}
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <button
           type="button"
           onClick={onReset}
@@ -144,101 +150,97 @@ export function ResultView({
         </div>
       </div>
 
-      {/* The result card (this is what gets downloaded) */}
-      <div
-        ref={captureRef}
-        className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm"
-      >
-        {/* Identity header */}
-        <header className="border-b border-border px-7 py-6 sm:px-10 sm:py-8">
-          <h1 className="font-heading text-2xl font-semibold leading-snug tracking-tight sm:text-3xl">
+      {/* Captured region */}
+      <div ref={captureRef} className="bg-background px-1 pt-14 pb-2 sm:pt-20">
+        {/* Identity */}
+        <header>
+          <h1 className="font-heading text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
             {identity.name}
           </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-3 text-sm text-muted-foreground sm:text-base">
             {enFaculty(transcript.faculty)}
             {level && ` · ${level}`}
             <span className="font-mono"> · ID {identity.code}</span>
           </p>
         </header>
 
-        <div className="grid lg:grid-cols-[1fr_1.15fr]">
-          {/* GPA verdict */}
-          <section className="flex flex-col items-center justify-center px-7 py-12 text-center sm:px-10">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-              Cumulative GPA
-            </p>
-            <div className="mt-3 flex items-baseline gap-2.5">
+        {/* GPA — the hero */}
+        <section className="mt-12 border-t border-border pt-10 sm:mt-16 sm:pt-14">
+          <p className="text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">
+            Cumulative GPA
+          </p>
+          <div className="mt-5 flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
+            <div className="flex items-baseline gap-4">
               <span
-                className="font-heading text-6xl font-semibold leading-none tabular-nums sm:text-7xl"
+                className="font-heading text-7xl font-semibold leading-[0.85] tabular-nums sm:text-8xl lg:text-9xl"
                 style={{ color: standing.color }}
               >
                 {shown !== null ? shown.toFixed(2) : "—"}
               </span>
-              <span className="text-2xl font-medium text-muted-foreground">
+              <span className="text-3xl font-medium text-muted-foreground sm:text-4xl">
                 / {GPA_MAX.toFixed(1)}
               </span>
             </div>
-            <p
-              className="mt-4 font-heading text-xl font-semibold"
+            <span
+              className="font-heading text-3xl font-semibold sm:text-4xl"
               style={{ color: standing.color }}
             >
               {standing.label}
-            </p>
+            </span>
+          </div>
 
-            {gpa.gpa !== null && (
-              <div className="mt-7 h-1.5 w-full max-w-[15rem] overflow-hidden rounded-full bg-muted">
-                <div
-                  className="h-full rounded-full transition-[width] duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-                  style={{
-                    width: `${filled}%`,
-                    backgroundColor: standing.color,
-                  }}
-                />
-              </div>
-            )}
+          {gpa.gpa !== null && (
+            <div className="mt-9 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full transition-[width] duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                style={{ width: `${filled}%`, backgroundColor: standing.color }}
+              />
+            </div>
+          )}
 
-            <p className="mt-6 text-xs text-muted-foreground">
-              {gpa.courses.length} courses · {gpa.totalCreditHours} credit hours
-            </p>
-          </section>
-
-          {/* Courses */}
-          <section className="border-t border-border px-7 py-7 sm:px-10 lg:border-t-0 lg:border-l">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-              Courses
-            </p>
-            <ul className="mt-1 divide-y divide-border">
-              {gpa.courses.map((c) => (
-                <li key={c.name} className="flex items-center gap-4 py-3.5">
-                  <span
-                    className="w-9 shrink-0 font-heading text-lg font-semibold"
-                    style={{ color: gradeColor(c.grade) }}
-                  >
-                    {c.grade}
-                  </span>
-                  <span className="min-w-0 flex-1 truncate text-sm sm:text-[0.95rem]">
-                    {c.name}
-                  </span>
-                  <span
-                    className="shrink-0 text-lg font-semibold tabular-nums"
-                    style={{ color: scoreColor(c.score) }}
-                  >
-                    {c.score !== null ? c.score : "—"}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
-
-        <div className="border-t border-border py-3.5 text-center">
-          <p className="text-xs tracking-wide text-muted-foreground/60">
-            ai.kfs.swoo.me
+          <p className="mt-5 text-sm text-muted-foreground">
+            {gpa.courses.length} courses · {gpa.totalCreditHours} credit hours
           </p>
-        </div>
+        </section>
+
+        {/* Courses */}
+        <section className="mt-12 border-t border-border pt-10 sm:mt-16 sm:pt-14">
+          <p className="text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">
+            Courses
+          </p>
+          <div className="mt-2 grid gap-x-14 sm:grid-cols-2">
+            {columns.map((col) => (
+              <ul key={col.key} className="divide-y divide-border">
+                {col.items.map((c) => (
+                  <li key={c.name} className="flex items-center gap-4 py-4">
+                    <span
+                      className="w-9 shrink-0 font-heading text-lg font-semibold"
+                      style={{ color: gradeColor(c.grade) }}
+                    >
+                      {c.grade}
+                    </span>
+                    <span className="min-w-0 flex-1 truncate text-base">
+                      {c.name}
+                    </span>
+                    <span
+                      className="shrink-0 text-lg font-semibold tabular-nums"
+                      style={{ color: scoreColor(c.score) }}
+                    >
+                      {c.score !== null ? c.score : "—"}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ))}
+          </div>
+        </section>
+
+        <p className="mt-16 text-xs tracking-wide text-muted-foreground/50">
+          ai.kfs.swoo.me
+        </p>
       </div>
 
-      <footer className="mt-6 space-y-2 text-center">
+      <footer className="mt-8 space-y-2">
         {gpa.provisional && (
           <p className="text-xs text-muted-foreground">
             Some credit hours are estimated, so the GPA may shift slightly.
