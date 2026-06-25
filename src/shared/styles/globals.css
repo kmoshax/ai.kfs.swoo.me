@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@import "./theme.css";
+@import "./tokens.css";
+@import "./base.css";
+@import "./motion.css";
+
+@custom-variant dark (&:is(.dark *));

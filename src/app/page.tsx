@@ -1,4 +1,4 @@
-import { LookupWizard } from "@/components/lookup-wizard";
+import { LookupWizard } from "@/features/lookup";
 
 export default function Home() {
   return (

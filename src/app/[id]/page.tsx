@@ -1,7 +1,5 @@
-import { LookupWizard } from "@/components/lookup-wizard";
+import { LookupWizard } from "@/features/lookup";
 
-// Shareable link: /<nationalId>. A valid 14-digit id auto-runs the lookup;
-// anything else just falls back to the plain lookup screen.
 export default async function SharedResult({
   params,
 }: {
