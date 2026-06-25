@@ -202,17 +202,27 @@ export function LookupWizard({ initialId }: { initialId?: string }) {
   }
 
   return (
-    <div className="animate-rise flex flex-1 flex-col px-6 py-10 sm:px-10 sm:py-12">
-      <p className="text-center text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">
+    <div className="flex flex-1 flex-col px-6 py-10 sm:px-12 sm:py-12 lg:px-20">
+      <p
+        className="animate-rise text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground"
+        style={{ animationDelay: "40ms" }}
+      >
         Kafr El-Sheikh · Faculty of AI
       </p>
 
-      <div className="flex flex-1 flex-col items-center justify-center gap-14 py-12">
-        <h1 className="font-heading text-6xl font-semibold leading-[0.98] tracking-tight text-balance sm:text-7xl lg:text-8xl">
+      <div className="flex flex-1 flex-col items-start justify-center gap-12 py-12">
+        <h1
+          className="animate-rise max-w-4xl font-heading text-6xl font-semibold leading-[0.98] tracking-tight sm:text-7xl lg:text-8xl"
+          style={{ animationDelay: "120ms" }}
+        >
           Know your result.
         </h1>
 
-        <form onSubmit={onSubmit} className="w-full max-w-lg space-y-3">
+        <form
+          onSubmit={onSubmit}
+          className="animate-rise w-full max-w-lg space-y-3"
+          style={{ animationDelay: "220ms" }}
+        >
           <Input
             inputMode="numeric"
             autoComplete="off"
@@ -222,11 +232,11 @@ export function LookupWizard({ initialId }: { initialId?: string }) {
             onChange={(e) =>
               setNationalId(e.target.value.replace(/\D/g, "").slice(0, 14))
             }
-            className="h-16 rounded-2xl text-center font-mono text-xl tracking-[0.12em] placeholder:tracking-normal placeholder:font-sans placeholder:text-muted-foreground/50"
+            className="h-16 rounded-2xl font-mono text-xl tracking-[0.12em] placeholder:font-sans placeholder:tracking-normal placeholder:text-muted-foreground/50"
           />
           <Button
             type="submit"
-            className="h-16 w-full rounded-2xl text-lg font-semibold"
+            className="h-16 w-full rounded-2xl text-lg font-semibold transition-transform active:scale-[0.99]"
             disabled={loading}
           >
             {loading ? <Spinner className="size-5" /> : "Show my grades"}
@@ -234,7 +244,10 @@ export function LookupWizard({ initialId }: { initialId?: string }) {
         </form>
       </div>
 
-      <p className="text-center text-xs tracking-wide text-muted-foreground/50">
+      <p
+        className="animate-rise text-xs tracking-wide text-muted-foreground/50"
+        style={{ animationDelay: "320ms" }}
+      >
         ai.kfs.swoo.me
       </p>
     </div>

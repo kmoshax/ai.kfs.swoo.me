@@ -10,14 +10,7 @@ import { toPng } from "html-to-image";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
-import {
-  enFaculty,
-  enLevel,
-  GPA_MAX,
-  gpaStanding,
-  gradeColor,
-  scoreColor,
-} from "@/lib/kfs/grade-meta";
+import { enFaculty, enLevel, GPA_MAX, gpaStanding } from "@/lib/kfs/grade-meta";
 import type { LookupResult } from "@/lib/kfs/types";
 
 function usePrefersReducedMotion() {
@@ -114,9 +107,9 @@ export function ResultView({
   }
 
   return (
-    <div className="animate-rise w-full max-w-5xl lg:flex lg:min-h-0 lg:flex-1 lg:flex-col">
+    <div className="w-full max-w-5xl lg:flex lg:min-h-0 lg:flex-1 lg:flex-col">
       {/* Top bar (excluded from the downloaded image) */}
-      <div className="flex shrink-0 flex-wrap items-center justify-between gap-3">
+      <div className="animate-rise flex shrink-0 flex-wrap items-center justify-between gap-3">
         <button
           type="button"
           onClick={onReset}
@@ -152,7 +145,7 @@ export function ResultView({
         <div className="grid gap-x-16 gap-y-12 lg:grid-cols-2">
           {/* Left: identity + GPA */}
           <div className="flex flex-col">
-            <header>
+            <header className="animate-rise" style={{ animationDelay: "60ms" }}>
               <h1 className="font-heading text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
                 {identity.name}
               </h1>
@@ -163,36 +156,30 @@ export function ResultView({
               </p>
             </header>
 
-            <section className="mt-12 flex flex-1 flex-col justify-center lg:mt-16">
+            <section
+              className="animate-rise mt-12 flex flex-1 flex-col justify-center lg:mt-16"
+              style={{ animationDelay: "140ms" }}
+            >
               <p className="text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">
                 Cumulative GPA
               </p>
               <div className="mt-5 flex items-baseline gap-4">
-                <span
-                  className="font-heading text-7xl font-semibold leading-[0.85] tabular-nums sm:text-8xl"
-                  style={{ color: standing.color }}
-                >
+                <span className="font-heading text-7xl font-semibold leading-[0.85] tabular-nums sm:text-8xl">
                   {shown !== null ? shown.toFixed(2) : "—"}
                 </span>
                 <span className="text-3xl font-medium text-muted-foreground">
                   / {GPA_MAX.toFixed(1)}
                 </span>
               </div>
-              <p
-                className="mt-4 font-heading text-2xl font-semibold sm:text-3xl"
-                style={{ color: standing.color }}
-              >
+              <p className="mt-4 font-heading text-2xl font-semibold text-muted-foreground sm:text-3xl">
                 {standing.label}
               </p>
 
               {gpa.gpa !== null && (
                 <div className="mt-8 h-1.5 w-full overflow-hidden rounded-full bg-muted">
                   <div
-                    className="h-full rounded-full transition-[width] duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-                    style={{
-                      width: `${filled}%`,
-                      backgroundColor: standing.color,
-                    }}
+                    className="h-full rounded-full bg-foreground transition-[width] duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                    style={{ width: `${filled}%` }}
                   />
                 </div>
               )}
@@ -205,26 +192,27 @@ export function ResultView({
           </div>
 
           {/* Right: courses */}
-          <section className="border-t border-border pt-10 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-16">
+          <section
+            className="animate-rise border-t border-border pt-10 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-16"
+            style={{ animationDelay: "200ms" }}
+          >
             <p className="text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">
               Courses
             </p>
-            <ul className="mt-2 divide-y divide-border">
-              {gpa.courses.map((c) => (
-                <li key={c.name} className="flex items-center gap-4 py-4">
-                  <span
-                    className="w-9 shrink-0 font-heading text-lg font-semibold"
-                    style={{ color: gradeColor(c.grade) }}
-                  >
+            <ul className="mt-2">
+              {gpa.courses.map((c, i) => (
+                <li
+                  key={c.name}
+                  className="animate-rise -mx-3 flex items-center gap-4 rounded-xl border-b border-border px-3 py-4 transition-colors last:border-0 hover:bg-foreground/[0.035]"
+                  style={{ animationDelay: `${260 + i * 45}ms` }}
+                >
+                  <span className="w-9 shrink-0 font-heading text-lg font-semibold">
                     {c.grade}
                   </span>
                   <span className="min-w-0 flex-1 truncate text-base">
                     {c.name}
                   </span>
-                  <span
-                    className="shrink-0 text-lg font-semibold tabular-nums"
-                    style={{ color: scoreColor(c.score) }}
-                  >
+                  <span className="shrink-0 text-lg font-semibold tabular-nums">
                     {c.score !== null ? c.score : "—"}
                   </span>
                 </li>
