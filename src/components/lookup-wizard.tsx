@@ -144,7 +144,7 @@ export function LookupWizard({ initialId }: { initialId?: string }) {
 
   if (result)
     return (
-      <div className="flex flex-1 flex-col items-center px-6 py-10 sm:py-14">
+      <div className="flex flex-1 flex-col items-center px-6 py-7">
         <ResultView result={result} onReset={reset} />
       </div>
     );
