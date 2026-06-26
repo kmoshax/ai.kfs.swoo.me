@@ -1,7 +1,117 @@
 @import "tailwindcss";
-@import "./theme.css";
-@import "./tokens.css";
-@import "./base.css";
-@import "./motion.css";
 
 @custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans:
+    var(--font-geist), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    var(--font-geist-mono), var(--font-arabic), ui-monospace, monospace;
+  --font-heading:
+    var(--font-display), var(--font-arabic), ui-sans-serif, system-ui,
+    sans-serif;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-grade-a: var(--grade-a);
+  --color-grade-b: var(--grade-b);
+  --color-grade-c: var(--grade-c);
+  --color-grade-d: var(--grade-d);
+  --color-grade-f: var(--grade-f);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(0.992 0.003 95);
+  --foreground: oklch(0.235 0.01 260);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.235 0.01 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.235 0.01 260);
+
+  --primary: oklch(0.255 0.012 260);
+  --primary-foreground: oklch(0.985 0.002 95);
+
+  --secondary: oklch(0.965 0.003 95);
+  --secondary-foreground: oklch(0.255 0.012 260);
+  --muted: oklch(0.965 0.003 95);
+  --muted-foreground: oklch(0.555 0.012 260);
+  --accent: oklch(0.965 0.003 95);
+  --accent-foreground: oklch(0.255 0.012 260);
+
+  --destructive: oklch(0.55 0.19 26);
+  --border: oklch(0.905 0.004 260);
+  --input: oklch(0.93 0.004 260);
+  --ring: oklch(0.255 0.012 260 / 35%);
+
+  --grade-f: oklch(0.56 0.18 26);
+  --grade-d: oklch(0.62 0.14 52);
+  --grade-c: oklch(0.64 0.12 78);
+  --grade-b: oklch(0.53 0.12 248);
+  --grade-a: oklch(0.53 0.12 158);
+
+  --radius: 1rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  html {
+    @apply font-sans;
+  }
+  .tnum {
+    font-feature-settings: "tnum" 1;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise {
+    animation: none;
+  }
+}
