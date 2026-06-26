@@ -19,7 +19,14 @@ export function CourseList({ courses }: { courses: CourseComputed[] }) {
             <span className="w-9 shrink-0 font-heading text-lg font-semibold">
               {c.grade}
             </span>
-            <span className="min-w-0 flex-1 truncate text-base">{c.name}</span>
+            <span className="flex min-w-0 flex-1 items-center gap-2">
+              <span className="truncate text-base">{c.name}</span>
+              {c.training && (
+                <span className="shrink-0 text-xs text-muted-foreground">
+                  training · not in GPA
+                </span>
+              )}
+            </span>
             <span className="shrink-0 text-lg font-semibold tabular-nums">
               {c.score !== null ? c.score : "—"}
             </span>

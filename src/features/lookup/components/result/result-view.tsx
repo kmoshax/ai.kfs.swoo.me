@@ -7,7 +7,7 @@ import {
   useGpaFill,
   useReducedMotion,
 } from "../../hooks";
-import { GPA_MAX, gpaStanding } from "../../presentation";
+import { GPA_MAX, gpaStanding, trainingHours } from "../../presentation";
 import { ResultBody } from "./result-body";
 import { ResultFooter } from "./result-footer";
 import { ResultToolbar } from "./result-toolbar";
@@ -44,7 +44,10 @@ export function ResultView({
         filled={filled}
         standingLabel={standing.label}
       />
-      <ResultFooter provisional={gpa.provisional} />
+      <ResultFooter
+        provisional={gpa.provisional}
+        trainingHours={trainingHours(gpa.courses)}
+      />
     </div>
   );
 }

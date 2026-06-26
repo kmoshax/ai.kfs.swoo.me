@@ -27,6 +27,7 @@ export interface CourseComputed extends Course {
   creditHours: number;
   creditHoursKnown: boolean;
   points: number | null;
+  training?: boolean;
 }
 
 export interface GpaResult {
