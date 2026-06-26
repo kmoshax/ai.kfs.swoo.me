@@ -1,1 +1,0 @@
-export { InsightsDashboard } from "./components";

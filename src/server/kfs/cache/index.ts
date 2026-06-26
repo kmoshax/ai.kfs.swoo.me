@@ -1,5 +1,4 @@
 export { COLLECTIONS, getDb } from "./db";
-export { getAllGrades } from "./grades-all";
 export {
   cacheGrades,
   getCachedGrades,
