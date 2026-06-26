@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { NationalIdForm } from "./national-id-form";
 
 type NationalIdScreenProps = {
@@ -31,10 +32,26 @@ export function NationalIdScreen(props: NationalIdScreenProps) {
       </div>
 
       <p
-        className="animate-rise text-xs tracking-wide text-muted-foreground/50"
+        className="animate-rise flex items-center gap-2 text-xs tracking-wide text-muted-foreground/50"
         style={{ animationDelay: "320ms" }}
       >
         ai.kfs.swoo.me
+        <span aria-hidden>·</span>
+        <Link
+          href="/terms"
+          className="underline-offset-4 transition-colors hover:text-foreground hover:underline"
+        >
+          Terms of Use
+        </Link>
+        <span aria-hidden>·</span>
+        <a
+          href="https://github.com/kmoshax/ai.kfs.swoo.me"
+          target="_blank"
+          rel="noreferrer"
+          className="underline-offset-4 transition-colors hover:text-foreground hover:underline"
+        >
+          GitHub
+        </a>
       </p>
     </div>
   );
