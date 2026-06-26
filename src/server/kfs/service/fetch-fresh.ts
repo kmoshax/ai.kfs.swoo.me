@@ -1,11 +1,7 @@
-import {
-  cacheGrades,
-  clearSeed,
-  getSeed,
-  seedToForm,
-} from "@/server/kfs/cache";
+import { clearSeed, getSeed, saveGrades } from "@/db";
 import { computeGpa } from "@/server/kfs/gpa";
 import { submitNewresult } from "@/server/kfs/scraper";
+import { seedToForm } from "@/server/kfs/session";
 import type { LookupResult } from "@/types";
 import { LookupError, SeedExpired } from "./errors";
 import { resolveIdentity } from "./identity";
@@ -39,6 +35,6 @@ export async function fetchFreshGrades(
     fetchedAt: Date.now(),
     cached: false,
   };
-  await cacheGrades(nationalId, result);
+  await saveGrades(nationalId, result);
   return result;
 }

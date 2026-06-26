@@ -1,6 +1,5 @@
 import type { FormState } from "@/server/kfs/scraper";
 import type { Page } from "@/types";
-import { RESEED_TTL, reseeds } from "./cache-state";
 
 export interface ReseedSession {
   seedId: string;
@@ -8,6 +7,14 @@ export interface ReseedSession {
   form: FormState;
   createdAt: number;
 }
+
+const RESEED_TTL = 10 * 60 * 1000;
+
+const g = globalThis as typeof globalThis & {
+  __kfsReseeds?: Map<string, ReseedSession>;
+};
+g.__kfsReseeds ??= new Map();
+const reseeds = g.__kfsReseeds;
 
 export function putReseed(s: ReseedSession): void {
   const now = Date.now();

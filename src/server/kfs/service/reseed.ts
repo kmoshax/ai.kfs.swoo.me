@@ -1,12 +1,12 @@
+import { setSeed } from "@/db";
+import { startGetmail, startNewresult } from "@/server/kfs/scraper";
 import {
   dropReseed,
   formToSeed,
   getReseed,
   newSid,
   putReseed,
-  setSeed,
-} from "@/server/kfs/cache";
-import { startGetmail, startNewresult } from "@/server/kfs/scraper";
+} from "@/server/kfs/session";
 import type { Page } from "@/types";
 import { verifySeed } from "./verify";
 

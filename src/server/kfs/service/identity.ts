@@ -1,17 +1,12 @@
-import {
-  cacheIdentity,
-  clearSeed,
-  getCachedIdentity,
-  getSeed,
-  seedToForm,
-} from "@/server/kfs/cache";
+import { clearSeed, getIdentity, getSeed, saveIdentity } from "@/db";
 import { submitGetmail } from "@/server/kfs/scraper";
+import { seedToForm } from "@/server/kfs/session";
 import type { Identity } from "@/types";
 import { LookupError, SeedExpired } from "./errors";
 
 export async function resolveIdentity(nationalId: string): Promise<Identity> {
-  const cached = await getCachedIdentity(nationalId);
-  if (cached) return cached;
+  const stored = await getIdentity(nationalId);
+  if (stored) return stored;
 
   const seed = await getSeed("getmail");
   if (!seed) throw new SeedExpired("getmail");
@@ -28,6 +23,6 @@ export async function resolveIdentity(nationalId: string): Promise<Identity> {
     }
     throw new LookupError(res.reason, res.message);
   }
-  await cacheIdentity(nationalId, res.identity);
+  await saveIdentity(nationalId, res.identity);
   return res.identity;
 }

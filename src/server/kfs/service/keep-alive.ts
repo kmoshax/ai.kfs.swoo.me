@@ -1,4 +1,5 @@
-import { clearSeed, getSeed, seedToForm } from "@/server/kfs/cache";
+import { clearSeed, getSeed } from "@/db";
+import { seedToForm } from "@/server/kfs/session";
 import type { Page } from "@/types";
 import { ensureInit } from "./init";
 import { verifySeed } from "./verify";

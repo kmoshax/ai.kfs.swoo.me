@@ -6,9 +6,9 @@
   "description": "Captcha-free grade and GPA lookup for the Faculty of Artificial Intelligence, Kafr El-Sheikh University.",
   "homepage": "https://ai.kfs.swoo.me",
   "scripts": {
-    "dev": "bun --bun next dev",
-    "build": "bun --bun next build",
-    "start": "bun --bun next start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "biome check",
     "format": "biome format --write"
   },
@@ -19,7 +19,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "html-to-image": "^1.11.13",
-    "mongodb": "6",
+    "mongoose": "^9.7.2",
     "next": "16.2.9",
     "next-themes": "^0.4.6",
     "react": "19.2.4",

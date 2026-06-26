@@ -1,5 +1,5 @@
+import type { Seed } from "@/db";
 import type { FormState } from "@/server/kfs/scraper";
-import type { Seed } from "./seed-state";
 
 export function seedToForm(seed: Seed): FormState {
   return {

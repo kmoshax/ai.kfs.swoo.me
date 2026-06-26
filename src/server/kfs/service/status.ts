@@ -1,4 +1,4 @@
-import { getSeed } from "@/server/kfs/cache";
+import { getSeed } from "@/db";
 import type { Page } from "@/types";
 
 export async function seedStatus(): Promise<Record<Page, boolean>> {
