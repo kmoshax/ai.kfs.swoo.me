@@ -3,7 +3,7 @@ import type { CourseComputed } from "@/types";
 export function CourseList({ courses }: { courses: CourseComputed[] }) {
   return (
     <section
-      className="animate-rise border-t border-border pt-8 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-16"
+      className="animate-rise min-w-0 border-t border-border pt-8 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-16"
       style={{ animationDelay: "200ms" }}
     >
       <p className="text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">
