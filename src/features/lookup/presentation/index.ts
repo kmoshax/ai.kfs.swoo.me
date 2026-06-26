@@ -1,3 +1,3 @@
-export { GPA_BANDS, GPA_MAX, gpaStanding } from "./gpa-standing";
+export { bandsFor, GPA_MAX, gpaStanding } from "./gpa-standing";
 export { gradeColor, scoreColor } from "./grade-colors";
-export { enFaculty, enLevel } from "./locale";
+export { enFaculty, enLevel, enProgram } from "./locale";

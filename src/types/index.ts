@@ -10,5 +10,6 @@ export type {
   GpaResult,
   Identity,
   LookupResult,
+  Program,
   Transcript,
 } from "./domain";

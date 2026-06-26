@@ -1,3 +1,6 @@
+import type { Program } from "@/types";
+import { BIO_CREDIT_HOURS } from "./credit-hours-bio";
+
 export const DEFAULT_CREDIT_HOURS = 3;
 
 export const CREDIT_HOURS: Record<string, number> = {
@@ -74,11 +77,15 @@ export function normalizeCourse(name: string): string {
     .trim();
 }
 
-export function creditHoursFor(name: string): {
+export function creditHoursFor(
+  name: string,
+  program: Program,
+): {
   hours: number;
   known: boolean;
 } {
+  const table = program === "bio" ? BIO_CREDIT_HOURS : CREDIT_HOURS;
   const key = normalizeCourse(name);
-  if (key in CREDIT_HOURS) return { hours: CREDIT_HOURS[key], known: true };
+  if (key in table) return { hours: table[key], known: true };
   return { hours: DEFAULT_CREDIT_HOURS, known: false };
 }

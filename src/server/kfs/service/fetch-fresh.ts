@@ -1,5 +1,5 @@
 import { clearSeed, getSeed, saveGrades } from "@/db";
-import { computeGpa } from "@/server/kfs/gpa";
+import { computeGpa, detectProgram } from "@/server/kfs/gpa";
 import { submitNewresult } from "@/server/kfs/scraper";
 import { seedToForm } from "@/server/kfs/session";
 import type { LookupResult } from "@/types";
@@ -31,7 +31,10 @@ export async function fetchFreshGrades(
   const result: LookupResult = {
     identity,
     transcript: res.transcript,
-    gpa: computeGpa(res.transcript.courses),
+    gpa: computeGpa(
+      res.transcript.courses,
+      detectProgram(res.transcript.section),
+    ),
     fetchedAt: Date.now(),
     cached: false,
   };

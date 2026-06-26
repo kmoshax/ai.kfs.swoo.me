@@ -1,3 +1,5 @@
+import type { Program } from "@/types";
+
 export const GRADE_POINTS: Record<string, number> = {
   "A+": 4.0,
   A: 3.7,
@@ -14,7 +16,20 @@ export const GRADE_POINTS: Record<string, number> = {
   F: 0.0,
 };
 
-export function gradePointsFor(grade: string): number | null {
+export const BIO_GRADE_POINTS: Record<string, number> = {
+  "A+": 4.0,
+  A: 3.7,
+  "B+": 3.3,
+  B: 3.0,
+  "C+": 2.7,
+  C: 2.4,
+  "D+": 2.2,
+  D: 2.0,
+  F: 0.0,
+};
+
+export function gradePointsFor(grade: string, program: Program): number | null {
+  const table = program === "bio" ? BIO_GRADE_POINTS : GRADE_POINTS;
   const key = grade.replace(/\s+/g, "").toUpperCase();
-  return key in GRADE_POINTS ? GRADE_POINTS[key] : null;
+  return key in table ? table[key] : null;
 }

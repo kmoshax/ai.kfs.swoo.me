@@ -1,4 +1,4 @@
-import type { CourseComputed, GpaResult } from "@/types";
+import type { CourseComputed, GpaResult, Program } from "@/types";
 import { creditHoursFor } from "./credit-hours";
 import { gradePointsFor } from "./scale";
 
@@ -8,14 +8,17 @@ export interface CourseInput {
   grade: string;
 }
 
-export function computeGpa(courses: CourseInput[]): GpaResult {
+export function computeGpa(
+  courses: CourseInput[],
+  program: Program,
+): GpaResult {
   let qualityPoints = 0;
   let totalHours = 0;
   let provisional = false;
 
   const computed: CourseComputed[] = courses.map((c) => {
-    const { hours, known } = creditHoursFor(c.name);
-    const points = gradePointsFor(c.grade);
+    const { hours, known } = creditHoursFor(c.name, program);
+    const points = gradePointsFor(c.grade, program);
     if (!known) provisional = true;
     if (points !== null) {
       qualityPoints += points * hours;
@@ -35,5 +38,6 @@ export function computeGpa(courses: CourseInput[]): GpaResult {
     gpa:
       totalHours > 0 ? Number((qualityPoints / totalHours).toFixed(3)) : null,
     provisional,
+    program,
   };
 }

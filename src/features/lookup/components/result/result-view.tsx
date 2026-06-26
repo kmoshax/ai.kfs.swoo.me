@@ -20,7 +20,7 @@ export function ResultView({
   onReset: () => void;
 }) {
   const { identity, gpa } = result;
-  const standing = gpaStanding(gpa.gpa);
+  const standing = gpaStanding(gpa.gpa, gpa.program);
   const reduced = useReducedMotion();
   const shown = useCountUp(gpa.gpa, reduced);
 

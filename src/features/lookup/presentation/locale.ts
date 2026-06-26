@@ -4,6 +4,13 @@ export function enFaculty(faculty: string | null): string {
   return faculty;
 }
 
+export function enProgram(section: string | null): string | null {
+  if (!section) return null;
+  if (/حيوي/.test(section)) return "Bio-AI Program";
+  if (/عام/.test(section)) return "General Program";
+  return section;
+}
+
 export function enLevel(level: string | null): string | null {
   if (!level) return null;
   const map: [RegExp, string][] = [

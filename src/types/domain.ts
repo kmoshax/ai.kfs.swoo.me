@@ -21,6 +21,8 @@ export interface Transcript {
   courses: Course[];
 }
 
+export type Program = "general" | "bio";
+
 export interface CourseComputed extends Course {
   creditHours: number;
   creditHoursKnown: boolean;
@@ -32,6 +34,7 @@ export interface GpaResult {
   totalCreditHours: number;
   gpa: number | null;
   provisional: boolean;
+  program: Program;
 }
 
 export interface LookupResult {
