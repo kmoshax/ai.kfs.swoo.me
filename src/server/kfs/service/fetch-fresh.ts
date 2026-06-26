@@ -31,10 +31,7 @@ export async function fetchFreshGrades(
   const result: LookupResult = {
     identity,
     transcript: res.transcript,
-    gpa: computeGpa(
-      res.transcript.courses,
-      detectProgram(res.transcript.section),
-    ),
+    gpa: computeGpa(res.transcript.courses, detectProgram(res.transcript)),
     fetchedAt: Date.now(),
     cached: false,
   };

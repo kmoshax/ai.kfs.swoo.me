@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { startKeepAlive } from "@/server/kfs/service";
 import { handleLookup, handleReseed } from "./handlers";
+import { lookupRateLimited } from "./rate-guard";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -23,8 +24,11 @@ export async function POST(request: Request) {
   }
 
   try {
-    if (body.action === "lookup")
+    if (body.action === "lookup") {
+      const limited = await lookupRateLimited(request);
+      if (limited) return limited;
       return await handleLookup((body.nationalId ?? "").trim());
+    }
     if (body.action === "reseed")
       return await handleReseed(body.seedId, (body.captcha ?? "").trim());
     return NextResponse.json(

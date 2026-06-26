@@ -6,6 +6,7 @@ export type LookupErrorReason =
   | "invalid_id"
   | "not_found"
   | "view_limit"
+  | "rate_limited"
   | "upstream"
   | "bad_request"
   | "unknown";

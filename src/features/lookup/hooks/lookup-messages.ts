@@ -8,5 +8,7 @@ export function toastLookupFailure(reason: LookupErrorReason) {
     toast.error("Enter a valid 14-digit National ID.");
   else if (reason === "view_limit")
     toast.error("You've reached the maximum number of result views.");
+  else if (reason === "rate_limited")
+    toast.error("Too many requests — please wait a moment and try again.");
   else toast.error("Something went wrong. Please try again shortly.");
 }
