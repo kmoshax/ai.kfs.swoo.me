@@ -26,7 +26,7 @@ export function ResultBody({
       className="bg-background px-1 pt-6 pb-2 sm:pt-10 lg:flex lg:min-h-0 lg:flex-1 lg:flex-col lg:justify-center lg:py-6"
     >
       <div className="grid gap-y-10 lg:grid-cols-2 lg:gap-x-16 lg:gap-y-12">
-        <div className="flex flex-col">
+        <div className="flex min-w-0 flex-col">
           <IdentityHeader identity={identity} transcript={transcript} />
           <GpaSummary
             gpa={gpa}
