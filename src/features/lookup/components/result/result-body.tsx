@@ -23,9 +23,9 @@ export function ResultBody({
   return (
     <div
       ref={captureRef}
-      className="bg-background px-1 pt-10 pb-2 lg:flex lg:min-h-0 lg:flex-1 lg:flex-col lg:justify-center lg:py-6"
+      className="bg-background px-1 pt-6 pb-2 sm:pt-10 lg:flex lg:min-h-0 lg:flex-1 lg:flex-col lg:justify-center lg:py-6"
     >
-      <div className="grid gap-x-16 gap-y-12 lg:grid-cols-2">
+      <div className="grid gap-y-10 lg:grid-cols-2 lg:gap-x-16 lg:gap-y-12">
         <div className="flex flex-col">
           <IdentityHeader identity={identity} transcript={transcript} />
           <GpaSummary
@@ -38,7 +38,7 @@ export function ResultBody({
         <CourseList courses={gpa.courses} />
       </div>
 
-      <p className="mt-12 text-xs tracking-wide text-muted-foreground/50">
+      <p className="mt-10 text-xs tracking-wide text-muted-foreground/50 lg:mt-12">
         ai.kfs.swoo.me
       </p>
     </div>
