@@ -1,9 +1,10 @@
 export const GPA_BANDS = [
-  { label: "Poor", min: 0, color: "var(--grade-f)" },
+  { label: "Very Poor", min: 0, color: "var(--grade-f)" },
+  { label: "Poor", min: 1.0, color: "var(--grade-f)" },
   { label: "Pass", min: 2.0, color: "var(--grade-d)" },
-  { label: "Good", min: 2.4, color: "var(--grade-c)" },
-  { label: "Very Good", min: 2.8, color: "var(--grade-b)" },
-  { label: "Excellent", min: 3.4, color: "var(--grade-a)" },
+  { label: "Good", min: 2.5, color: "var(--grade-c)" },
+  { label: "Very Good", min: 3.0, color: "var(--grade-b)" },
+  { label: "Excellent", min: 3.5, color: "var(--grade-a)" },
 ] as const;
 
 export const GPA_MAX = 4.0;
