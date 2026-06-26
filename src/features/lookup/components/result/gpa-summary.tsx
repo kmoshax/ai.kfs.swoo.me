@@ -16,17 +16,17 @@ export function GpaSummary({
 }: GpaSummaryProps) {
   return (
     <section
-      className="animate-rise mt-12 flex flex-1 flex-col justify-center lg:mt-16"
+      className="animate-rise mt-8 flex flex-1 flex-col justify-center lg:mt-16"
       style={{ animationDelay: "140ms" }}
     >
       <p className="text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">
         Cumulative GPA
       </p>
-      <div className="mt-5 flex items-baseline gap-4">
+      <div className="mt-5 flex items-baseline gap-3 sm:gap-4">
         <span className="font-heading text-7xl font-semibold leading-[0.85] tabular-nums sm:text-8xl">
           {shown !== null ? shown.toFixed(2) : "—"}
         </span>
-        <span className="text-3xl font-medium text-muted-foreground">
+        <span className="text-2xl font-medium text-muted-foreground sm:text-3xl">
           / {GPA_MAX.toFixed(1)}
         </span>
       </div>
