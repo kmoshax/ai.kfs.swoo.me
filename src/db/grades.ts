@@ -1,13 +1,19 @@
-import type { LookupResult } from "@/types";
+import type { GradesSnapshot, LookupResult } from "@/types";
 import { GradesModel } from "./models";
+
+type StoredGrades = LookupResult & {
+  _id: string;
+  snapshots?: GradesSnapshot[];
+};
 
 export async function saveGrades(
   nationalId: string,
   result: LookupResult,
+  snapshot: GradesSnapshot,
 ): Promise<void> {
   await GradesModel.updateOne(
     { _id: nationalId },
-    { $set: result },
+    { $set: { ...result, snapshots: [snapshot] } },
     { upsert: true },
   );
 }
@@ -15,12 +21,10 @@ export async function saveGrades(
 export async function getGrades(
   nationalId: string,
 ): Promise<LookupResult | undefined> {
-  const doc = await GradesModel.findById(nationalId).lean<
-    LookupResult & { _id: string }
-  >();
+  const doc = await GradesModel.findById(nationalId).lean<StoredGrades>();
   if (!doc) return undefined;
-  const { _id, ...result } = doc;
-  return result;
+  const { _id, snapshots, ...result } = doc;
+  return { ...result, history: snapshots ?? [] };
 }
 
 export const peekGrades = getGrades;

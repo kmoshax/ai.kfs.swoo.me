@@ -4,3 +4,4 @@ export { getIdentity, saveIdentity } from "./identities";
 export type { GradesDoc, IdentityDoc, Seed, SeedDoc } from "./models";
 export { hitRateLimit } from "./rate-limit";
 export { clearSeed, getSeed, setSeed } from "./seeds";
+export { appendSnapshot, touchGrades } from "./snapshots";

@@ -38,10 +38,18 @@ export interface GpaResult {
   program: Program;
 }
 
+export interface GradesSnapshot {
+  fetchedAt: number;
+  level: string | null;
+  transcript: Transcript;
+  gpa: GpaResult;
+}
+
 export interface LookupResult {
   identity: Identity;
   transcript: Transcript;
   gpa: GpaResult;
   fetchedAt: number;
   cached: boolean;
+  history?: GradesSnapshot[];
 }

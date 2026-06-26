@@ -8,6 +8,7 @@ import {
   useReducedMotion,
 } from "../../hooks";
 import { GPA_MAX, gpaStanding, trainingHours } from "../../presentation";
+import { HistorySection } from "./history-section";
 import { ResultBody } from "./result-body";
 import { ResultFooter } from "./result-footer";
 import { ResultToolbar } from "./result-toolbar";
@@ -48,6 +49,7 @@ export function ResultView({
         provisional={gpa.provisional}
         trainingHours={trainingHours(gpa.courses)}
       />
+      <HistorySection history={result.history} />
     </div>
   );
 }

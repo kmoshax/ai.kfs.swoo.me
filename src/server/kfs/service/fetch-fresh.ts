@@ -1,12 +1,13 @@
 import { clearSeed, getSeed, saveGrades } from "@/db";
 import { computeGpa, detectProgram } from "@/server/kfs/gpa";
+import { toSnapshot } from "@/server/kfs/history";
 import { submitNewresult } from "@/server/kfs/scraper";
 import { seedToForm } from "@/server/kfs/session";
 import type { LookupResult } from "@/types";
 import { LookupError, SeedExpired } from "./errors";
 import { resolveIdentity } from "./identity";
 
-export async function fetchFreshGrades(
+export async function buildFreshResult(
   nationalId: string,
 ): Promise<LookupResult> {
   const identity = await resolveIdentity(nationalId);
@@ -28,13 +29,19 @@ export async function fetchFreshGrades(
     throw new LookupError(res.reason, res.message);
   }
 
-  const result: LookupResult = {
+  return {
     identity,
     transcript: res.transcript,
     gpa: computeGpa(res.transcript.courses, detectProgram(res.transcript)),
     fetchedAt: Date.now(),
     cached: false,
   };
-  await saveGrades(nationalId, result);
+}
+
+export async function fetchFreshGrades(
+  nationalId: string,
+): Promise<LookupResult> {
+  const result = await buildFreshResult(nationalId);
+  await saveGrades(nationalId, result, toSnapshot(result));
   return result;
 }

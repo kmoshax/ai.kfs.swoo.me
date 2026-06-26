@@ -8,6 +8,7 @@ export type {
   Course,
   CourseComputed,
   GpaResult,
+  GradesSnapshot,
   Identity,
   LookupResult,
   Program,
